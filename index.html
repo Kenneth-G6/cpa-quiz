@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#3d6b57">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="data:,">
+<title>刷题机</title>
+<script>
+/* ERR-GUARD-BEGIN 纯 ES5 错误出口：不依赖任何后续脚本，其它脚本全挂也能独立显示。 */
+(function(){
+  function band(text){
+    var existing=document.getElementById('err-band');
+    if(!existing){
+      existing=document.createElement('div');
+      existing.id='err-band';
+      existing.style.cssText='margin:10px 12px;padding:10px 12px;border-radius:10px;font-size:13px;line-height:1.6;white-space:pre-wrap;word-break:break-word;background:#fbeeec;border:1px solid #e6b3ab;color:#8c2f22;';
+      if(document.body){document.body.insertBefore(existing,document.body.firstChild);}
+    }
+    existing.textContent=(existing.textContent?existing.textContent+'\n':'')+text;
+  }
+  window.__errBand=band;
+  window.onerror=function(message,source,lineno,colno,stack){
+    var st='';
+    try{if(stack)st=String(stack).split('\n').slice(0,3).join('\n');}catch(e){}
+    band('[onerror] '+message+'\n'+(source||'')+':'+(lineno||'?')+':'+(colno||'?')+(st?'\n'+st:''));
+  };
+  window.addEventListener('unhandledrejection',function(ev){
+    var reason=ev&&ev.reason;
+    var msg=reason&&(reason.message||String(reason))||'unhandled rejection';
+    band('[unhandledrejection] '+msg);
+  });
+  function diagState(){
+    var parts=[];
+    parts.push('href='+location.href);
+    parts.push('UA='+navigator.userAgent);
+    parts.push('DATA='+(window.DATA?'存在':'无'));
+    if(window.DATA&&window.DATA.chapters)parts.push('DATA.chapters='+window.DATA.chapters.length);
+    if(window.DATA&&window.DATA.questions)parts.push('DATA.questions='+window.DATA.questions.length);
+    if(window.DATA&&window.DATA.knowledge)parts.push('DATA.knowledge='+(typeof window.DATA.knowledge==='object'?Object.keys(window.DATA.knowledge).length:'-'));
+    parts.push('INDEX='+(window.INDEX?'存在':'无'));
+    if(window.INDEX&&window.INDEX.chapters)parts.push('INDEX.chapters='+window.INDEX.chapters.length);
+    var scripts=document.getElementsByTagName('script');
+    var sizes=[];
+    for(var i=0;i<scripts.length;i++){
+      var s=scripts[i];
+      sizes.push(i+':'+(s.textContent?s.textContent.length:(s.src?('src:'+s.src):'-')));
+    }
+    parts.push('script数='+scripts.length+' ['+sizes.join(', ')+']');
+    return parts.join('\n');
+  }
+  window.addEventListener('load',function(){
+    setTimeout(function(){
+      var app=document.getElementById('app');
+      if(!app||app.children.length===0){
+        band('渲染未发生（#app 为空）\n'+diagState());
+      }
+    },1200);
+  });
+})();
+/*ERR-GUARD-END*/
+</script>
+<style>
+  :root{
+    --bg:#f5f3ee; --card:#ffffff; --ink:#2b2a26; --muted:#716d63; --line:#e4e0d6;
+    --accent:#3d6b57; --accent-dark:#315846; --right:#2e7d4f; --wrong:#b3402f;
+    --warn:#a9792b; --chip:#efede6; --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    background:var(--bg); color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC","Source Han Sans SC",system-ui,sans-serif;
+    font-size:17px; line-height:1.75; padding-bottom:48px;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:0 16px;}
+  header.top{
+    position:sticky;top:0;z-index:20;background:var(--bg);
+    border-bottom:1px solid var(--line);
+  }
+  .top-inner{display:flex;align-items:center;gap:10px;padding:12px 16px;max-width:860px;margin:0 auto;position:relative;}
+  .top-inner h1{font-size:19px;font-weight:700;flex:1;}
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);
+    background:var(--card);color:var(--ink);border-radius:10px;padding:9px 14px;
+    font-size:15px;cursor:pointer;text-decoration:none;line-height:1.3;
+  }
+  .btn:hover{border-color:var(--accent);}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .btn.primary:hover{background:var(--accent-dark);}
+  .btn.small{padding:6px 10px;font-size:14px;border-radius:8px;}
+  .btn.ghost{background:transparent;}
+  .sync-badge{
+    flex-shrink:0;display:inline-flex;align-items:center;gap:4px;
+    font-size:12px;line-height:1.4;padding:3px 9px;border-radius:8px;white-space:nowrap;
+  }
+  .sync-badge.synced{color:var(--right);background:#eef6f0;border:1px solid #cfe5d5;}
+  .sync-badge.syncing{color:var(--muted);background:var(--chip);border:1px solid var(--line);}
+  .sync-badge.local{color:var(--warn);background:#fbf4e4;border:1px solid #e6d3a8;}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:18px;margin:14px 0;
+  }
+  .muted{color:var(--muted);}
+  .goal{font-size:16px;color:var(--accent-dark);background:#f0f5f1;border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0;}
+  .stats-line{display:flex;flex-wrap:wrap;gap:8px 16px;font-size:15px;color:var(--muted);margin:10px 0;}
+  .stats-line b{color:var(--ink);}
+  .chip{display:inline-block;background:var(--chip);border-radius:8px;padding:2px 10px;font-size:14px;}
+  .tag{display:inline-block;border:1px solid var(--line);border-radius:7px;padding:1px 9px;font-size:13px;margin-right:6px;}
+  .tag.theory{color:#5a574f;border-color:#d8d4c8;background:#f6f4ee;}
+  .tag.practice{color:var(--warn);border-color:#e6d3a8;background:#fbf4e4;}
+  .src{display:inline-block;border-radius:7px;padding:1px 9px;font-size:13px;}
+  .src.s-orig{background:#eaf3ec;color:var(--right);border:1px solid #cfe5d5;}
+  .src.s-none{background:#f0efeb;color:var(--muted);border:1px solid var(--line);}
+  .src.s-gen{background:#fbf4e4;color:var(--warn);border:1px solid #e6d3a8;}
+  .src.s-src-orig{background:#eaf3ec;color:var(--right);border:1px solid #cfe5d5;}
+  .src.s-src-rewrite{background:#fbf4e4;color:var(--warn);border:1px solid #e6d3a8;}
+  .src.s-src-gen{background:#efede6;color:#5a574f;border:1px solid #d8d4c8;}
+  /* chapter list */
+  .ch-item{display:block;text-decoration:none;color:var(--ink);}
+  .ch-item.locked{opacity:.55;cursor:not-allowed;}
+  .ch-item .ch-head{display:flex;align-items:baseline;gap:10px;}
+  .ch-item .ch-name{font-size:17px;font-weight:700;}
+  .status{font-size:14px;margin-left:auto;white-space:nowrap;}
+  .status.pass{color:var(--right);}
+  .status.lock{color:var(--muted);}
+  .status.doing{color:var(--warn);}
+  .ch-goal{font-size:14px;color:var(--muted);margin-top:4px;}
+  .ch-meta{font-size:14px;color:var(--muted);margin-top:6px;display:flex;gap:14px;flex-wrap:wrap;}
+  /* mode selector */
+  .modes{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0;}
+  .mode-btn{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:15px;}
+  .mode-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .sec-list{display:flex;flex-direction:column;gap:10px;}
+  .sec-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;}
+  .sec-item .sec-name{flex:1;}
+  /* question card */
+  .q-tags{margin-bottom:10px;display:flex;flex-wrap:wrap;align-items:center;gap:6px;}
+  .stem{font-size:18px;font-weight:600;margin:8px 0 16px;}
+  .context-box{background:#f6f7f9;border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:10px 13px;margin:8px 0 14px;font-size:15px;color:#3a3832;line-height:1.7;}
+  .context-box .ctx-label{font-size:13px;font-weight:700;color:var(--accent-dark);margin-bottom:5px;}
+  .context-box .ctx-body{white-space:pre-wrap;}
+  .opts{display:flex;flex-direction:column;gap:12px;}
+  .opt{
+    display:flex;gap:10px;width:100%;text-align:left;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;padding:13px 15px;cursor:pointer;font-size:16px;
+    min-height:44px;
+  }
+  .opt .k{font-weight:700;color:var(--accent-dark);min-width:22px;}
+  .opt:hover{border-color:var(--accent);}
+  .opt.correct{border-color:var(--right);background:#eef6f0;}
+  .opt.correct .k{color:var(--right);}
+  .opt.wrong{border-color:var(--wrong);background:#fbeeec;}
+  .opt.wrong .k{color:var(--wrong);}
+  .opt.disabled{cursor:default;}
+  .opt.disabled:hover{border-color:var(--line);}
+  .opt.selected{border-color:var(--accent);}
+  .verdict{margin:14px 0 0;font-weight:700;font-size:16px;}
+  .verdict.right{color:var(--right);}
+  .verdict.wrong{color:var(--wrong);}
+  .panel{margin-top:16px;border-top:1px dashed var(--line);padding-top:14px;}
+  .hook{background:#fbf4e4;border-left:3px solid var(--warn);padding:9px 13px;border-radius:0 10px 10px 0;font-size:15px;margin-bottom:12px;color:#6b531f;}
+  .ans{font-weight:600;margin-bottom:8px;}
+  .ana{color:#3a3832;}
+  .kp-ref{margin-top:10px;font-size:14px;color:var(--muted);}
+  .self-btns{display:flex;gap:12px;margin-top:8px;}
+  .quiz-nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;}
+  .progress{font-size:14px;color:var(--muted);}
+  .summary{text-align:center;padding:24px 0;}
+  .summary .big{font-size:22px;font-weight:700;margin:10px 0;}
+  .note{font-size:14px;color:var(--warn);margin-top:8px;}
+  .toggle{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);cursor:pointer;}
+  input[type=file]{display:none;}
+  .empty{text-align:center;color:var(--muted);padding:36px 0;}
+  /* 头部菜单 */
+  .top-row{display:flex;align-items:center;gap:10px;}
+  .top-row1{flex:1;}
+  .menu-btn{display:none;}
+  /* 诊断面板 */
+  .diag-panel{position:fixed;left:10px;right:10px;bottom:10px;max-width:860px;margin:0 auto;
+    background:#1f2421;color:#e8e6dd;border-radius:12px;padding:12px 14px;font-size:12px;line-height:1.7;
+    white-space:pre-wrap;word-break:break-word;z-index:50;max-height:45vh;overflow:auto;}
+  .diag-panel h2{font-size:13px;margin-bottom:6px;}
+  @media (max-width:560px){
+    body{overflow-x:hidden;font-size:16px;}
+    .stem{font-size:17px;word-break:break-word;}
+    .context-box{word-break:break-word;}
+    .ch-name{word-break:break-word;}
+    .top-inner{flex-direction:column;gap:8px;padding:10px 12px;}
+    .top-row1{width:100%;}
+    .top-inner h1{font-size:17px;flex:1;white-space:nowrap;overflow:hidden;}
+    .btn{padding:8px 11px;font-size:14px;}
+    .menu-btn{display:inline-flex;}
+    .top-row2{
+      display:none;position:absolute;top:calc(100% + 6px);right:12px;flex-direction:column;gap:8px;
+      background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+      z-index:30;box-shadow:0 4px 14px rgba(0,0,0,.14);min-width:140px;
+    }
+    .top-row2.open{display:flex;}
+    .opts{gap:10px;}
+    .opt{font-size:16px;min-height:44px;}
+  }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-inner">
+    <div class="top-row top-row1">
+      <h1 id="top-title">刷题机 <span style="font-size:13px;color:var(--muted)">v5</span></h1>
+      <span class="sync-badge syncing" id="sync-badge" title="进度同步状态">⟳ 加载中</span>
+      <button class="btn small ghost menu-btn" id="btn-menu" aria-label="菜单">⋯</button>
+    </div>
+    <div class="top-row top-row2" id="header-menu">
+      <button class="btn small ghost" id="btn-export" title="导出进度 JSON">导出进度</button>
+      <button class="btn small ghost" id="btn-import" title="从 JSON 恢复进度">导入进度</button>
+      <button class="btn small ghost" id="btn-precache" title="把全部章节缓存到本机，供离线使用">缓存全部</button>
+      <label class="toggle" title="调试用：跳过章级闸门锁定">
+        <input type="checkbox" id="debug-unlock"> 调试解锁
+      </label>
+      <input type="file" id="import-file" accept="application/json,.json">
+    </div>
+  </div>
+</header>
+<div class="wrap" id="app">正在加载题库…</div>
+
+<script id="inline-data">
+/*DATA-BEGIN*/
+window.INDEX = {"dataVersion":1,"generatedAt":"2026-11-25T08:27:23+08:00","chapters":[{"ch":1,"name":"第一章 总论","goal_text":"分清哪些事项该进账、按什么规矩确认和计量、记错会错在哪。","q_count":29,"k_count":33,"exam_types":"单选题/多选题/客观题"},{"ch":2,"name":"第二章 存货","goal_text":"存货按什么价入账、发出按什么方法结转、期末跌价怎么测怎么提。","q_count":34,"k_count":35,"exam_types":""},{"ch":3,"name":"第三章 固定资产","goal_text":"固定资产怎么入账、怎么提折旧、后续支出哪些资本化、处置和盘盈盘亏怎么记。","q_count":29,"k_count":30,"exam_types":""},{"ch":4,"name":"第四章 无形资产","goal_text":"辨认无形资产、确定入账成本、研究开发支出哪些能资本化、摊销与处置怎么处理。","q_count":25,"k_count":26,"exam_types":"客观题/主观题"},{"ch":5,"name":"第五章 投资性房地产","goal_text":"哪些房地产算投资性房地产、两种后续计量模式怎么用、用途转换和处置怎么记账。","q_count":45,"k_count":25,"exam_types":"客观题/主观题"},{"ch":6,"name":"第六章 长期股权投资与合营安排","goal_text":"长期股权投资初始怎么计量、成本法与权益法后续怎么调、方法转换、处置与共同经营怎么处理。","q_count":167,"k_count":110,"exam_types":""},{"ch":7,"name":"第七章 资产减值","goal_text":"资产有没有减值迹象、可收回金额怎么算、资产组和商誉减值怎么分摊。","q_count":33,"k_count":26,"exam_types":"客观题/主观题"},{"ch":8,"name":"第八章 负债","goal_text":"各项流动负债与非流动负债怎么确认计量、应交税费和应付债券怎么记账。","q_count":29,"k_count":21,"exam_types":"客观题/主观题"},{"ch":9,"name":"第九章 职工薪酬","goal_text":"职工薪酬分哪几类、短期薪酬、离职后福利、辞退福利怎么确认计量和做账。","q_count":36,"k_count":34,"exam_types":"客观题/主观题"},{"ch":10,"name":"第十章 股份支付","goal_text":"能判断一项安排是否属于股份支付，区分权益结算与现金结算，按等待期完成费用分摊、条款修改、限制性股票与集团股份支付的账务处理。","q_count":79,"k_count":43,"exam_types":"计算分析题/综合题/客观题/主观题"},{"ch":11,"name":"第十一章 借款费用","goal_text":"能界定借款费用范围与符合资本化条件的资产，判断开始/暂停/停止资本化时点，按专门借款、一般借款、辅助费用、外币汇兑差额规则计算资本化金额并写对分录。","q_count":33,"k_count":18,"exam_types":"单选题/多选题/客观题/主观题"},{"ch":12,"name":"第十二章 或有事项","goal_text":"能区分或有负债/或有资产与预计负债，按三条件确认预计负债并用最佳估计数计量，处理未决诉讼、质量保证、亏损合同、重组义务的分录与列报披露。","q_count":43,"k_count":25,"exam_types":"客观题/主观题"},{"ch":13,"name":"第十三章 金融工具","goal_text":"能对金融资产/负债作三分类与负债权益区分，按摊余成本或公允价值完成初始与后续计量、减值三阶段、重分类、转移终止确认与套期会计处理，正确选用科目与借贷方向。","q_count":180,"k_count":97,"exam_types":"主观题"},{"ch":14,"name":"第十四章 租赁","goal_text":"能识别租赁并完成承租人、出租人各环节的科目选择、借贷方向与金额计量，处理租赁变更、转租赁与售后租回。","q_count":121,"k_count":68,"exam_types":""},{"ch":15,"name":"第十五章 持有待售的非流动资产、处置组和终止经营","goal_text":"能判断非流动资产或处置组是否划分为持有待售、是否构成终止经营，完成计量减值、转回与列报。","q_count":52,"k_count":24,"exam_types":""},{"ch":16,"name":"第十六章 所有者权益","goal_text":"能区分实收资本、其他权益工具、资本公积、其他综合收益与留存收益的归属，完成增减资、溢价、股份支付、转增与弥补亏损的科目选择、借贷方向与列报。","q_count":25,"k_count":21,"exam_types":"客观题/主观题"},{"ch":17,"name":"第十七章 收入、费用和利润","goal_text":"能按五步法识别合同与履约义务、确定交易价格并分摊，判断时段/时点确认，处理特定交易、合同成本及费用利润结转。","q_count":138,"k_count":56,"exam_types":"客观题/主观题"},{"ch":18,"name":"第十八章 政府补助","goal_text":"能区分政府补助与收入、处置利得，判断与资产/与收益相关，按总额法或净额法完成补助的确认、计量与列报。","q_count":59,"k_count":28,"exam_types":"主观题"},{"ch":19,"name":"第十九章 所得税","goal_text":"能判断资产、负债的计税基础与暂时性差异类型，确认递延所得税资产/负债，计算当期所得税与所得税费用并完成列报。","q_count":99,"k_count":51,"exam_types":"主观题"},{"ch":20,"name":"第二十章 非货币性资产交换","goal_text":"能识别非货币性资产交换、判断商业实质与补价，按公允价值或账面价值为基础完成换入、换出资产的计量与分录。","q_count":33,"k_count":21,"exam_types":"客观题/主观题"},{"ch":21,"name":"第二十一章 债务重组","goal_text":"能区分债务人/债权人身份与重组方式（资产清偿、债转股、修改条款、组合方式），完成终止确认与损益计量分录。","q_count":35,"k_count":19,"exam_types":"客观题/主观题"},{"ch":22,"name":"第二十二章 外币折算","goal_text":"能选择记账本位币与即期/近似汇率，区分外币交易初始确认与期末汇兑差额处理，完成境外经营财务报表折算。","q_count":52,"k_count":18,"exam_types":"综合题/客观题"},{"ch":23,"name":"第二十三章 财务报告","goal_text":"能按准则完成资产负债表、利润表、现金流量表（直接法/间接法）、所有者权益变动表与附注项目的归类、填列与现金流量分类。","q_count":72,"k_count":60,"exam_types":"客观题"},{"ch":24,"name":"第二十四章 会计政策、会计估计及其变更和差错更正","goal_text":"能区分会计政策变更、会计估计变更与前期差错更正，判断追溯调整法/未来适用法/追溯重述法并完成更正与披露。","q_count":38,"k_count":24,"exam_types":"综合题/客观题"},{"ch":25,"name":"第二十五章 资产负债表日后事项","goal_text":"能区分调整事项与非调整事项，判断资产负债表日后事项类型，完成调整分录、报表调整与附注披露。","q_count":29,"k_count":16,"exam_types":"客观题/主观题"},{"ch":26,"name":"第二十六章 企业合并","goal_text":"能区分同一控制/非同一控制下企业合并类型（控股合并/吸收合并），完成合并日长期股权投资、商誉或资本公积处理及相关调整。","q_count":34,"k_count":24,"exam_types":""},{"ch":27,"name":"第二十七章 合并财务报表","goal_text":"能判断控制与合并范围，完成购买日及购买日后成本法转权益法、抵权益抵损益，抵销内部商品、债权债务、固定资产、无形资产交易，并处理追加投资、处置股权、交叉持股等特殊交易的合并编制。","q_count":214,"k_count":134,"exam_types":"综合题"},{"ch":28,"name":"第二十八章 每股收益","goal_text":"能确定基本每股收益的分子与分母，识别可转换债券、认股权证、股份期权、限制性股票、回购合同等潜在普通股的稀释性，计算稀释每股收益，并完成列报与重新计算。","q_count":58,"k_count":40,"exam_types":"综合题/客观题"},{"ch":29,"name":"第二十九章 公允价值计量","goal_text":"能界定有序交易、主要市场或最有利市场与市场参与者，选用市场法、收益法、成本法，区分输入值公允价值层次，处理非金融资产最佳用途及可抵销金融项目的公允价值计量。","q_count":30,"k_count":23,"exam_types":"单选题/多选题"},{"ch":30,"name":"第三十章 政府及民间非营利组织会计","goal_text":"能区分预算会计与财务会计的核算基础，完成财政及非财政拨款收支、结转结余、净资产、资产、负债业务，以及民间非营利组织受托代理、收入费用等业务的双分录核算与报表编制。","q_count":144,"k_count":82,"exam_types":"客观题"}]};
+/*DATA-END*/
+</script>
+<script>
+(function(){
+"use strict";
+var LS_KEY="cpa_quiz_v4";
+var PASS_ACC=0.8;
+var CACHE_PREFIX="cpa_ch_";
+var CACHE_MAX=3;
+var CACHE_BUDGET=2.5*1024*1024;
+
+/* ---------- 工具（纯 ES5，不依赖现代 API） ---------- */
+function assign(a,b){
+  var out={},k;
+  for(k in a){if(Object.prototype.hasOwnProperty.call(a,k))out[k]=a[k];}
+  for(k in b){if(Object.prototype.hasOwnProperty.call(b,k))out[k]=b[k];}
+  return out;
+}
+function esc(t){
+  return String(t==null?"":t).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+  });
+}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function pad2(n){return n<10?"0"+n:""+n;}
+
+/* ---------- 数据层：轻量版只有 INDEX；离线版全量 DATA ---------- */
+var loaded={};  // ch -> {knowledge:{}, questions:[]}
+function initData(){
+  if(window.DATA&&window.DATA.questions&&window.DATA.questions.length!==undefined){
+    var qs=window.DATA.questions,kp=window.DATA.knowledge||{};
+    var byCh={},i,q,kk;
+    for(i=0;i<qs.length;i++){q=qs[i];if(!byCh[q.ch])byCh[q.ch]={knowledge:{},questions:[]};byCh[q.ch].questions.push(q);}
+    for(kk in kp){if(!Object.prototype.hasOwnProperty.call(kp,kk))continue;var k=kp[kk];if(!byCh[k.ch])byCh[k.ch]={knowledge:{},questions:[]};byCh[k.ch].knowledge[kk]=k;}
+    loaded=byCh;
+  }else if(window.INDEX&&window.INDEX.chapters){
+    window.DATA={chapters:window.INDEX.chapters,knowledge:{},questions:[]};
+  }else{
+    window.DATA={chapters:[],knowledge:{},questions:[]};
+  }
+}
+function metaOf(ch){
+  var arr=window.DATA.chapters;
+  for(var i=0;i<arr.length;i++){if(arr[i].ch===ch)return arr[i];}
+  return null;
+}
+function questionsOf(ch){var d=loaded[ch];return d?d.questions:[];}
+function kpOf(q){var d=loaded[q.ch];return d&&d.knowledge?d.knowledge[q.topic]||null:null;}
+function chOfQid(qid){var m=/^CH(\d+)-/.exec(qid||"");return m?parseInt(m[1],10):null;}
+
+/* ---------- 本地状态 ---------- */
+function defaultState(){return {attempts:{},debugUnlock:false,mode:"R1"};}
+function migrateAttempts(att){
+  Object.keys(att).forEach(function(k){
+    var a=att[k];
+    if(typeof a!=="object")return;
+    if(typeof a.inWrong!=="boolean"){a.inWrong=(a.verdict==="wrong");}
+    if(typeof a.consecRight!=="number"){a.consecRight=0;}
+  });
+  return att;
+}
+function loadState(){
+  try{
+    var s=JSON.parse(localStorage.getItem(LS_KEY));
+    if(s&&typeof s.attempts==="object"){
+      s.attempts=migrateAttempts(s.attempts);
+      return assign(defaultState(),s);
+    }
+  }catch(e){}
+  return defaultState();
+}
+function saveState(){localStorage.setItem(LS_KEY,JSON.stringify(state));}
+var state=loadState();
+var view={screen:"home",ch:null,mode:"R1",section:null,queue:[],idx:0};
+
+/* ---------- 统计 / 闸门 ---------- */
+function stats(ch){
+  var meta=metaOf(ch);
+  var total=meta&&meta.q_count?meta.q_count:questionsOf(ch).length;
+  var answered=0,right=0,wrong=0;
+  for(var k in state.attempts){
+    if(!Object.prototype.hasOwnProperty.call(state.attempts,k))continue;
+    if(chOfQid(k)!==ch)continue;
+    var a=state.attempts[k];
+    if(a&&(a.verdict==="right"||a.verdict==="wrong")){
+      answered++;
+      if(a.verdict==="right")right++;
+      if(a.inWrong)wrong++;
+    }
+  }
+  var accuracy=answered?right/answered:null;
+  var passed=total>0&&answered>=total&&accuracy!==null&&accuracy>=PASS_ACC;
+  return {total:total,answered:answered,right:right,wrong:wrong,accuracy:accuracy,passed:passed};
+}
+function isLocked(ch){
+  if(ch<=1)return false;
+  if(state.debugUnlock)return false;
+  var prev=stats(ch-1);
+  if(prev.total===0)return false;
+  return !prev.passed;
+}
+function wrongOf(ch){
+  return questionsOf(ch).filter(function(q){var a=state.attempts[q.qid];return a&&a.inWrong;});
+}
+
+/* ---------- 同步层：XHR 封装（不假设 Promise 存在） ---------- */
+var SYNC={status:"local",timer:null,retryTimer:null,lastReason:"",lastStatus:0,staticMode:false};
+function isHttp(){return location.protocol==="http:"||location.protocol==="https:";}
+function badgeText(st,reason){
+  if(st==="synced")return "✓ 已同步";
+  if(st==="syncing")return "⟳ 同步中";
+  if(SYNC.staticMode)return "⚠ 本机存储（静态站点）";
+  if(reason==="offline")return "⚠ 仅本地（离线文件）";
+  if(reason==="timeout")return "⚠ 仅本地（请求超时）";
+  if(reason==="http")return "⚠ 仅本地（HTTP "+SYNC.lastStatus+"）";
+  return "⚠ 仅本地（未连服务）";
+}
+function setSyncStatus(st,reason){
+  SYNC.status=st;
+  if(reason!==undefined)SYNC.lastReason=reason;
+  var el=document.getElementById("sync-badge");
+  if(!el)return;
+  el.className="sync-badge "+st;
+  el.textContent=badgeText(st,SYNC.lastReason);
+}
+function httpRequest(method,url,bodyObj,timeoutMs,cb){
+  if(typeof XMLHttpRequest==="undefined"){cb({ok:false,reason:"noxhr",status:0,ms:0});return;}
+  var xhr=new XMLHttpRequest();
+  var done=false;
+  var t0=Date.now();
+  var timer=setTimeout(function(){
+    done=true;
+    try{xhr.abort();}catch(e){}
+    cb({ok:false,reason:"timeout",status:0,ms:Date.now()-t0});
+  },timeoutMs||3000);
+  xhr.onreadystatechange=function(){
+    if(done||xhr.readyState!==4)return;
+    done=true;clearTimeout(timer);
+    var status=0;try{status=xhr.status||0;}catch(e){}
+    var text="";try{text=xhr.responseText||"";}catch(e){}
+    var ms=Date.now()-t0;
+    if(status>=200&&status<300){
+      var parsed=null;
+      if(text){try{parsed=JSON.parse(text);}catch(e){cb({ok:false,reason:"badjson",status:status,ms:ms});return;}}
+      cb({ok:true,status:status,data:parsed,ms:ms});
+    }else{
+      cb({ok:false,reason:"http",status:status,ms:ms});
+    }
+  };
+  try{
+    xhr.open(method,url,true);
+    if(bodyObj!==null&&bodyObj!==undefined)xhr.setRequestHeader("Content-Type","application/json");
+    xhr.send(bodyObj===null||bodyObj===undefined?null:JSON.stringify(bodyObj));
+  }catch(e){done=true;clearTimeout(timer);cb({ok:false,reason:"send",status:0,ms:Date.now()-t0});}
+}
+function pickNewer(local,server){
+  var ln=(local&&local.n)||0, sn=(server&&server.n)||0;
+  if(sn>ln)return server;
+  if(ln>sn)return local;
+  var la=(local&&local.answeredAt)||"", sa=(server&&server.answeredAt)||"";
+  if(sa>la)return server;
+  if(la>sa)return local;
+  return local;
+}
+function mergeAttempts(localAtt,serverAtt){
+  var out={};
+  Object.keys(localAtt||{}).forEach(function(k){out[k]=assign({},localAtt[k]);});
+  Object.keys(serverAtt||{}).forEach(function(k){
+    var s=serverAtt[k];
+    if(typeof s!=="object"||!s)return;
+    if(!out[k]){out[k]=assign({},s);}
+    else{out[k]=pickNewer(out[k],s);}
+  });
+  return out;
+}
+function pushProgress(){
+  if(!isHttp()||SYNC.staticMode)return;
+  setSyncStatus("syncing");
+  httpRequest("POST","/api/progress",{schema:1,attempts:state.attempts},3000,function(res){
+    if(res.ok){setSyncStatus("synced");}
+    else{applyLocalFail(res);}
+  });
+}
+function scheduleSync(){
+  if(!isHttp())return;
+  if(SYNC.timer)clearTimeout(SYNC.timer);
+  SYNC.timer=setTimeout(pushProgress,300);
+}
+function applyLocalFail(res){
+  SYNC.lastStatus=res&&res.status||0;
+  SYNC.staticMode=true;
+  setSyncStatus("local","static");
+  if(SYNC.retryTimer){clearTimeout(SYNC.retryTimer);SYNC.retryTimer=null;}
+}
+function scheduleHealthRetry(){
+  if(SYNC.staticMode)return;
+  if(!isHttp())return;
+  if(SYNC.retryTimer)clearTimeout(SYNC.retryTimer);
+  SYNC.retryTimer=setTimeout(healthRetry,15000);
+}
+function healthRetry(){
+  SYNC.retryTimer=null;
+  if(SYNC.staticMode)return;
+  if(!isHttp())return;
+  if(document.hidden){scheduleHealthRetry();return;}
+  httpRequest("GET","/api/health",null,3000,function(res){
+    if(res.ok){setSyncStatus("synced");bootstrapSync();}
+    else{applyLocalFail(res);scheduleHealthRetry();}
+  });
+}
+document.addEventListener("visibilitychange",function(){if(!document.hidden)scheduleHealthRetry();});
+
+/* ---------- 章节数据：按需加载 + localStorage LRU 缓存 ---------- */
+function cacheKey(ch){return CACHE_PREFIX+ch;}
+function readCache(ch){
+  try{
+    var raw=localStorage.getItem(cacheKey(ch));
+    if(!raw)return null;
+    var obj=JSON.parse(raw);
+    if(!obj||!obj.knowledge||!obj.questions)return null;
+    return obj;
+  }catch(e){return null;}
+}
+function writeCache(ch,data){
+  try{
+    var entry={ch:ch,savedAt:new Date().toISOString(),knowledge:data.knowledge,questions:data.questions};
+    var raw=JSON.stringify(entry);
+    var keys=[],i,k;
+    for(i=0;i<localStorage.length;i++){k=localStorage.key(i);if(k&&k.indexOf(CACHE_PREFIX)===0)keys.push(k);}
+    var sizes={},total=0;
+    keys.forEach(function(k){var v=localStorage.getItem(k)||"";sizes[k]=v.length;total+=v.length;});
+    var cur=cacheKey(ch);
+    if(sizes[cur])total-=sizes[cur];
+    total+=raw.length;
+    while(total>CACHE_BUDGET&&keys.length>0){
+      var oldest=null,oldestTs="9999";
+      keys.forEach(function(k){
+        var o;try{o=JSON.parse(localStorage.getItem(k));}catch(e){o=null;}
+        var ts=o&&o.savedAt||"";
+        if(ts<oldestTs){oldestTs=ts;oldest=k;}
+      });
+      if(!oldest)break;
+      localStorage.removeItem(oldest);total-=sizes[oldest]||0;
+      keys.splice(keys.indexOf(oldest),1);
+    }
+    keys=[];
+    for(i=0;i<localStorage.length;i++){k=localStorage.key(i);if(k&&k.indexOf(CACHE_PREFIX)===0)keys.push(k);}
+    keys.sort(function(a,b){
+      var ta,tb;
+      try{ta=JSON.parse(localStorage.getItem(a)).savedAt||"";}catch(e){ta="";}
+      try{tb=JSON.parse(localStorage.getItem(b)).savedAt||"";}catch(e){tb="";}
+      return ta<tb?-1:(ta>tb?1:0);
+    });
+    while(keys.length>=CACHE_MAX){localStorage.removeItem(keys[0]);keys.shift();}
+    localStorage.setItem(cur,raw);
+  }catch(e){/* 配额满等异常不阻断答题 */}
+}
+function normalizeChapter(data){
+  var knowledge={};
+  var kp=data.knowledge||[];
+  for(var i=0;i<kp.length;i++){knowledge[kp[i].kp_id]=kp[i];}
+  return {knowledge:knowledge,questions:data.questions||[]};
+}
+function ensureChapter(ch,cb){
+  if(loaded[ch]){cb(true,loaded[ch]);return;}
+  var cached=readCache(ch);
+  if(cached){loaded[ch]=cached;cb(true,cached);return;}
+  if(!isHttp()){cb(false,null,{reason:"offline"});return;}
+  httpRequest("GET","./data/ch"+pad2(ch)+".json",null,3000,function(res){
+    if(res.ok&&res.data&&res.data.questions){
+      var data=normalizeChapter(res.data);
+      loaded[ch]=data;writeCache(ch,data);
+      cb(true,data);
+    }else{
+      cb(false,res);
+    }
+  });
+}
+
+/* ---------- 章节加载中的占位 / 失败页 ---------- */
+var chapterLoadingTimer=null;
+function clearChapterTimer(){if(chapterLoadingTimer){clearInterval(chapterLoadingTimer);chapterLoadingTimer=null;}}
+function renderChapterLoading(ch){
+  var app=document.getElementById("app");
+  var meta=metaOf(ch);
+  app.innerHTML='<div class="card"><div class="goal">'+esc(meta?meta.name:("第 "+ch+" 章"))+'</div>'+
+    '<div class="muted" id="ch-loading">正在载入本章题库…</div></div>';
+  var t0=Date.now();
+  clearChapterTimer();
+  chapterLoadingTimer=setInterval(function(){
+    var el=document.getElementById("ch-loading");
+    if(!el){clearChapterTimer();return;}
+    var s=Math.round((Date.now()-t0)/1000);
+    el.textContent=s>=3?("网络较慢，已等待 "+s+" 秒…"):("正在载入本章题库…");
+  },1000);
+}
+function reasonText(res){
+  if(!res)return "未知错误";
+  if(res.reason==="offline")return "本章未缓存，需联网首次加载";
+  if(res.reason==="timeout")return "请求超时（3s）";
+  if(res.reason==="http")return "HTTP "+(res.status||"?");
+  if(res.reason==="badjson")return "数据格式错误（HTTP "+(res.status||"")+"）";
+  if(res.reason==="noxhr")return "当前环境不支持 XHR";
+  return "未连服务";
+}
+function renderChapterError(ch,res){
+  clearChapterTimer();
+  var app=document.getElementById("app");
+  var meta=metaOf(ch);
+  app.innerHTML='<div class="card"><div class="goal">'+esc(meta?meta.name:("第 "+ch+" 章"))+'</div>'+
+    '<div class="muted" style="margin:10px 0">本章题库加载失败：'+esc(reasonText(res))+'</div>'+
+    '<div class="row"><button class="btn primary" id="btn-retry-ch">重试</button>'+
+    '<button class="btn ghost" id="btn-back-err">← 返回章节列表</button></div></div>';
+  document.getElementById("btn-retry-ch").onclick=function(){openChapter(ch);};
+  document.getElementById("btn-back-err").onclick=function(){view.screen="home";safeRender(renderHome);};
+}
+function openChapter(ch){
+  if(isLocked(ch)){alert("本章尚未解锁：需先通关上一章。调试可勾选右上角「调试解锁」。");return;}
+  view.ch=ch;view.screen="chapter";
+  renderChapterLoading(ch);
+  ensureChapter(ch,function(ok,data,res){
+    if(ok){safeRender(renderChapter);}
+    else{renderChapterError(ch,res);}
+  });
+}
+
+/* ---------- 渲染兜底 ---------- */
+function safeRender(fn){
+  try{fn();}catch(e){
+    var msg=(e&&e.message)||String(e);
+    if(window.__errBand)window.__errBand("[render] "+msg);
+    var app=document.getElementById("app");
+    if(app)app.innerHTML='<div class="card" style="color:#8c2f22">渲染出错：'+esc(msg)+'</div>';
+  }
+}
+
+/* ---------- 渲染：首页（章列表） ---------- */
+function renderHome(){
+  var app=document.getElementById("app");
+  var totalWrong=Object.keys(state.attempts).filter(function(k){return state.attempts[k].inWrong;}).length;
+  var html='<div class="card"><div class="row"><b>错题本</b><span class="chip">当前共 '+totalWrong+' 道错题</span>'+
+    '<span class="muted" style="font-size:14px">进入任意章节后，用「R2 错题轮」单独抽出重刷。</span></div></div>';
+  window.DATA.chapters.forEach(function(c){
+    var s=stats(c.ch), locked=isLocked(c.ch);
+    var status, cls;
+    if(locked){status="🔒 未解锁";cls="lock";}
+    else if(s.passed){status="✅ 已通关";cls="pass";}
+    else if(s.answered>0){status="🟡 进行中";cls="doing";}
+    else{status="⬜ 未开始";cls="";}
+    var acc=s.accuracy===null?"—":Math.round(s.accuracy*100)+"%";
+    html+='<div class="card ch-item'+(locked?" locked":"")+'" data-ch="'+c.ch+'">'+
+      '<div class="ch-head"><span class="ch-name">'+esc(c.name)+'</span><span class="status '+cls+'">'+status+'</span></div>'+
+      (c.goal_text?'<div class="ch-goal">本章解决什么问题：'+esc(c.goal_text)+'</div>':"")+
+      '<div class="ch-meta"><span>总题数 '+s.total+'</span><span>已答 '+s.answered+'</span><span>正确率 '+acc+'</span><span>错题 '+s.wrong+'</span>'+
+      (c.exam_types?'<span>题型：'+esc(c.exam_types)+'</span>':"")+'</div></div>';
+  });
+  app.innerHTML=html;
+  Array.prototype.forEach.call(app.querySelectorAll(".ch-item"),function(el){
+    el.addEventListener("click",function(){
+      var ch=parseInt(el.getAttribute("data-ch"),10);
+      openChapter(ch);
+    });
+  });
+}
+
+/* ---------- 渲染：章节页 ---------- */
+function renderChapter(){
+  var c=metaOf(view.ch);
+  var s=stats(c.ch);
+  var acc=s.accuracy===null?"—":Math.round(s.accuracy*100)+"%";
+  var remain;
+  if(s.total===0){remain="本章暂无题目";}
+  else if(!s.passed){
+    var parts=[];
+    if(s.answered<s.total)parts.push("还差 "+(s.total-s.answered)+" 题未答");
+    if(s.accuracy!==null&&s.accuracy<PASS_ACC)parts.push("正确率还差 "+Math.max(0,Math.ceil((PASS_ACC-s.accuracy)*100))+" 个百分点");
+    remain=parts.length?parts.join("，"):"已达通关标准";
+  }else{remain="已通关";}
+  var sections=[];
+  questionsOf(c.ch).forEach(function(q){if(sections.indexOf(q.section)<0)sections.push(q.section);});
+  var wrong=wrongOf(c.ch);
+
+  var html='<div class="row"><button class="btn ghost" id="btn-back">← 返回章节列表</button>'+
+    '<h2 style="font-size:20px">'+esc(c.name)+'</h2></div>';
+  if(c.goal_text)html+='<div class="goal">本章解决什么问题：'+esc(c.goal_text)+'</div>';
+  html+='<div class="stats-line">'+
+    '<span>总题数 <b>'+s.total+'</b></span>'+
+    '<span>已答 <b>'+s.answered+'</b></span>'+
+    '<span>正确率 <b>'+acc+'</b></span>'+
+    '<span>错题 <b>'+s.wrong+'</b></span>'+
+    '<span>状态 <b>'+(s.passed?"✅ 已通关":"🟡 未通关")+'</b></span>'+
+    '<span>还差：'+esc(remain)+'</span></div>';
+
+  html+='<div class="modes">'+
+    '<button class="mode-btn'+(view.mode==="R1"?" active":"")+'" data-mode="R1">R1 摸底（按节逐题）</button>'+
+    '<button class="mode-btn'+(view.mode==="R2"?" active":"")+'" data-mode="R2">R2 错题轮</button>'+
+    '<button class="mode-btn'+(view.mode==="R3"?" active":"")+'" data-mode="R3">R3 通关卷（实务优先）</button></div>';
+
+  if(view.mode==="R1"){
+    html+='<div class="card"><div class="sec-list">';
+    if(sections.length===0){html+='<div class="empty">本节暂无题目。</div>';}
+    sections.forEach(function(sec){
+      var n=questionsOf(c.ch).filter(function(q){return q.section===sec;}).length;
+      html+='<button class="btn sec-item" data-sec="'+esc(sec)+'"><span class="sec-name">'+esc(sec||"未分节")+'</span><span class="muted">'+n+' 题</span><span>开始 →</span></button>';
+    });
+    html+='</div></div>';
+  }else if(view.mode==="R2"){
+    html+='<div class="card">';
+    if(wrong.length===0){html+='<div class="empty">错题本是空的，先去 R1 或 R3 做题。</div>';}
+    else{
+      html+='<div class="muted" style="margin-bottom:10px">错题 '+wrong.length+' 道。连续两遍都答对，才会清出错题本。</div>'+
+        '<button class="btn primary" id="btn-start">开始 R2 错题轮（'+wrong.length+' 题）</button>';
+    }
+    html+='</div>';
+  }else{
+    var qs=questionsOf(c.ch);
+    var prac=qs.filter(function(q){return q.card_type==="实务";});
+    var note=prac.length<Math.ceil(qs.length*0.6)&&qs.length>0?'<div class="note">本章实务题不足 60%，已按现有实务题优先抽取。</div>':"";
+    html+='<div class="card"><div class="muted" style="margin-bottom:10px">全章随机抽题，实务题优先占比 ≥60%。共 '+qs.length+' 题。</div>'+note+
+      '<button class="btn primary" id="btn-start"'+(qs.length===0?' disabled':'')+'>开始 R3 通关卷</button></div>';
+  }
+  document.getElementById("app").innerHTML=html;
+
+  document.getElementById("btn-back").onclick=function(){view.screen="home";safeRender(renderHome);};
+  Array.prototype.forEach.call(document.querySelectorAll(".mode-btn"),function(b){
+    b.onclick=function(){view.mode=b.getAttribute("data-mode");state.mode=view.mode;saveState();safeRender(renderChapter);};
+  });
+  Array.prototype.forEach.call(document.querySelectorAll(".sec-item"),function(b){
+    b.onclick=function(){view.section=b.getAttribute("data-sec");startQuiz();};
+  });
+  var bs=document.getElementById("btn-start");
+  if(bs)bs.onclick=function(){startQuiz();};
+}
+
+/* ---------- 抽题 ---------- */
+function buildQueue(){
+  var qs=questionsOf(view.ch);
+  if(view.mode==="R1"){return qs.filter(function(q){return q.section===view.section;});}
+  if(view.mode==="R2"){return qs.filter(function(q){return state.attempts[q.qid]&&state.attempts[q.qid].inWrong;});}
+  var prac=qs.filter(function(q){return q.card_type==="实务";});
+  var theory=qs.filter(function(q){return q.card_type!=="实务";});
+  var needPrac=Math.ceil(qs.length*0.6);
+  var p=shuffle(prac).slice(0,Math.min(needPrac,prac.length));
+  return shuffle(p.concat(shuffle(theory)));
+}
+function startQuiz(){
+  view.queue=buildQueue();
+  view.idx=0;
+  if(view.queue.length===0){alert("当前没有可做的题。");return;}
+  view.screen="quiz";safeRender(renderQuestion);
+}
+
+/* ---------- 渲染：答题页 ---------- */
+function renderQuestion(){
+  var app=document.getElementById("app");
+  var q=view.queue[view.idx];
+  var c=metaOf(view.ch);
+  var a=state.attempts[q.qid];
+  var judged=!!(a&&(a.verdict==="right"||a.verdict==="wrong")&&!a.editing);
+  var kp=kpOf(q);
+  var multi=q.qtype==="多选";
+  var selSet={};
+  if(a&&a.given){a.given.split("").forEach(function(L){selSet[L]=true;});}
+
+  var judgeQ=q.qtype==="判断";
+  var srcName=q.source||"生成";
+  var srcMap={"原文":"s-src-orig","改写":"s-src-rewrite","生成":"s-src-gen"};
+  var srcCls=srcMap[srcName]||"s-src-gen";
+  var tags="";
+  if(kp&&kp.card_type){tags+='<span class="tag '+(kp.card_type==="实务"?"practice":"theory")+'">'+esc(kp.card_type)+'</span>';}
+  tags+='<span class="tag theory">'+esc(q.qtype||"客观题")+'</span>';
+  if(q.year&&q.year!=="无")tags+='<span class="tag theory">'+esc(q.year)+'</span>';
+  tags+='<span class="src '+srcCls+'">'+esc(srcName)+'</span>';
+  var anCls=q.analysis_src==="原文解析"?"s-orig":(q.analysis_src==="原文无解析"?"s-none":"s-gen");
+  tags+='<span class="src '+anCls+'">'+esc(q.analysis_src||"生成待核")+'</span>';
+  if(q.audit==="待核")tags+='<span class="src s-gen">待核</span>';
+
+  var html='<div class="row"><button class="btn ghost" id="btn-back-ch">← 返回章节</button>'+
+    '<span class="progress">'+esc(c.name)+' · '+({R1:"摸底",R2:"错题轮",R3:"通关卷"}[view.mode])+' · 第 '+(view.idx+1)+' / '+view.queue.length+' 题</span></div>';
+  html+='<div class="card">';
+  html+='<div class="q-tags">'+tags+'</div>';
+  if(q.context)html+='<div class="context-box"><div class="ctx-label">情形（教材原题）</div><div class="ctx-body">'+esc(q.context)+'</div></div>';
+  html+='<div class="stem">'+esc(q.stem)+'</div>';
+
+  var letters=Object.keys(q.options||{});
+  html+='<div class="opts">';
+  letters.forEach(function(L){
+    var opt=q.options[L];
+    var cls="opt";
+    if(judged){
+      cls+=" disabled";
+      var ansLetters=String(q.answer||"").split("");
+      if(ansLetters.indexOf(L)>=0)cls+=" correct";
+      else if(selSet[L])cls+=" wrong";
+    }else if(selSet[L]){cls+=" selected";}
+    var label=judgeQ?'<span class="k">'+esc(opt)+'</span>':'<span class="k">'+L+'.</span><span>'+esc(opt)+'</span>';
+    html+='<button class="'+cls+'" data-k="'+L+'">'+label+'</button>';
+  });
+  html+='</div>';
+  if(multi&&!judged){html+='<div class="row" style="margin-top:12px"><button class="btn primary" id="opt-submit">提交答案</button><span class="muted" style="font-size:14px">多选题：选出所有正确项后提交。</span></div>';}
+
+  if(judged){
+    var verdictCls=a.verdict==="right"?"right":"wrong";
+    html+='<div class="verdict '+verdictCls+'">'+(a.verdict==="right"?"✓ 回答正确":"✗ 回答错误，已收入错题本")+'</div>';
+    html+='<div class="panel">';
+    if(q.practical_hook)html+='<div class="hook">实务提醒：'+esc(q.practical_hook)+'</div>';
+    html+='<div class="ans">参考答案：'+esc(q.answer||"（无）")+'</div>';
+    if(q.analysis)html+='<div class="ana">'+esc(q.analysis)+'</div>';
+    else html+='<div class="ana muted">本题暂无解析。</div>';
+    if(kp&&kp.title)html+='<div class="kp-ref">考点：'+esc(kp.title)+(kp.card_body?" — "+esc(kp.card_body):"")+'</div>';
+    html+='</div>';
+    html+='<div class="row" style="margin-top:12px"><button class="btn" id="btn-retry">重做本题</button></div>';
+  }
+
+  html+='<div class="quiz-nav">'+
+    '<button class="btn ghost" id="btn-prev"'+(view.idx===0?" disabled":"")+'>← 上一题</button>'+
+    (view.idx===view.queue.length-1
+      ?'<button class="btn primary" id="btn-finish">完成本卷</button>'
+      :'<button class="btn primary" id="btn-next">下一题 →</button>')+
+    '</div></div>';
+  app.innerHTML=html;
+
+  document.getElementById("btn-back-ch").onclick=function(){view.screen="chapter";safeRender(renderChapter);};
+  var prev=document.getElementById("btn-prev");
+  if(prev)prev.onclick=function(){if(view.idx>0){view.idx--;safeRender(renderQuestion);}};
+  var next=document.getElementById("btn-next");
+  if(next)next.onclick=function(){view.idx++;safeRender(renderQuestion);};
+  var finish=document.getElementById("btn-finish");
+  if(finish)finish.onclick=showSummary;
+  var retry=document.getElementById("btn-retry");
+  if(retry)retry.onclick=function(){if(state.attempts[q.qid]){state.attempts[q.qid].editing=true;saveState();}safeRender(renderQuestion);};
+
+  if(!judged){
+    var picked={};
+    Array.prototype.forEach.call(document.querySelectorAll(".opt"),function(el){
+      el.onclick=function(){
+        var L=el.getAttribute("data-k");
+        if(multi){
+          picked[L]=!picked[L];
+          el.classList.toggle("selected",picked[L]);
+        }else{
+          judge(q,[L]);
+        }
+      };
+    });
+    var sub=document.getElementById("opt-submit");
+    if(sub)sub.onclick=function(){
+      var arr=Object.keys(picked).filter(function(k){return picked[k];});
+      if(arr.length===0){alert("请先选出选项。");return;}
+      judge(q,arr);
+    };
+  }
+}
+
+function judge(q,selectedArr){
+  var ans=String(q.answer||"").trim().split("").sort().join("");
+  var sel=selectedArr.slice().sort().join("");
+  var right=ans!==""&&sel===ans;
+  record(q,right,selectedArr.join(""));
+  safeRender(renderQuestion);
+}
+function record(q,right,given){
+  var prev=state.attempts[q.qid];
+  var entry=prev?assign({},prev):{consecRight:0,inWrong:false};
+  entry.editing=false;
+  entry.verdict=right?"right":"wrong";
+  entry.given=given;
+  entry.answeredAt=new Date().toISOString();
+  entry.n=(prev&&prev.n||0)+1;
+  if(right){
+    entry.consecRight=(prev&&prev.consecRight||0)+1;
+    if(view.mode==="R2"&&entry.consecRight>=2){
+      delete state.attempts[q.qid];saveState();scheduleSync();return;
+    }
+    entry.inWrong=view.mode==="R2"?true:!!(prev&&prev.inWrong);
+  }else{
+    entry.consecRight=0;
+    entry.inWrong=true;
+  }
+  state.attempts[q.qid]=entry;
+  saveState();
+  scheduleSync();
+}
+
+function showSummary(){
+  var s=stats(view.ch);
+  var acc=s.accuracy===null?"—":Math.round(s.accuracy*100)+"%";
+  var app=document.getElementById("app");
+  var c=metaOf(view.ch);
+  app.innerHTML='<div class="card summary">'+
+    '<div class="progress">'+esc(c.name)+'</div>'+
+    '<div class="big">'+(s.passed?"✅ 本章已通关":"🟡 尚未通关")+'</div>'+
+    '<div class="stats-line" style="justify-content:center"><span>已答 '+s.answered+' / '+s.total+'</span><span>正确率 '+acc+'</span><span>错题 '+s.wrong+'</span></div>'+
+    '<div class="row" style="justify-content:center;margin-top:16px">'+
+    '<button class="btn" id="sm-chapter">返回章节页</button>'+
+    '<button class="btn primary" id="sm-home">回章节列表</button></div></div>';
+  document.getElementById("sm-chapter").onclick=function(){view.screen="chapter";renderChapter();};
+  document.getElementById("sm-home").onclick=function(){view.screen="home";safeRender(renderHome);};
+}
+
+/* ---------- 导入 / 导出 ---------- */
+function downloadBackup(att){
+  var merged=mergeAttempts(state.attempts,att||{});
+  var data={app:"cpa-quiz",version:2,exportedAt:new Date().toISOString(),state:assign({},state,{attempts:merged})};
+  var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="刷题进度备份_"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
+}
+function exportState(){
+  if(!SYNC.staticMode&&isHttp()){
+    setSyncStatus("syncing");
+    httpRequest("GET","/api/progress",null,3000,function(res){
+      if(res.ok){setSyncStatus("synced");downloadBackup(res.data&&res.data.attempts);}
+      else{applyLocalFail(res);downloadBackup({});}
+    });
+  }else{
+    downloadBackup({});
+  }
+}
+function importState(file){
+  var reader=new FileReader();
+  reader.onload=function(){
+    try{
+      var data=JSON.parse(reader.result);
+      var st=data.state||data;
+      if(!st||typeof st.attempts!=="object")throw new Error("格式不符：缺少 attempts");
+      var imported=migrateAttempts(st.attempts);
+      state.attempts=mergeAttempts(state.attempts,imported);
+      if(typeof st.debugUnlock==="boolean")state.debugUnlock=st.debugUnlock;
+      if(st.mode)state.mode=st.mode;
+      state.debugUnlock=!!state.debugUnlock;
+      saveState();
+      document.getElementById("debug-unlock").checked=state.debugUnlock;
+      alert("进度已合并：当前共 "+Object.keys(state.attempts).length+" 条答题记录。");
+      safeRender(renderHome);
+      scheduleSync();
+    }catch(e){alert("导入失败："+e.message);}
+  };
+  reader.readAsText(file,"utf-8");
+}
+
+/* ---------- 诊断面板（?diag=1） ---------- */
+function finishDiag(lines){
+  var lsKeys=0,lsBytes=0,i,k;
+  for(i=0;i<localStorage.length;i++){k=localStorage.key(i);lsKeys++;lsBytes+=(localStorage.getItem(k)||"").length;}
+  lines.push("localStorage 键数="+lsKeys+" 体积="+lsBytes+" 字符");
+  lines.push("DATA.chapters="+(window.DATA&&window.DATA.chapters?window.DATA.chapters.length:"-"));
+  lines.push("DATA.questions="+(window.DATA&&window.DATA.questions?window.DATA.questions.length:"-"));
+  lines.push("DATA.knowledge="+(window.DATA&&window.DATA.knowledge?Object.keys(window.DATA.knowledge).length:"-"));
+  lines.push("UA="+navigator.userAgent);
+  lines.push("textarea="+document.querySelectorAll("textarea").length);
+  lines.push("script="+document.querySelectorAll("script").length);
+  var panel=document.createElement("div");
+  panel.className="diag-panel";
+  panel.textContent="诊断面板（长按可复制）\n"+lines.join("\n");
+  document.body.appendChild(panel);
+}
+function buildDiag(){
+  if(location.search.indexOf("diag=1")<0)return;
+  var lines=[];
+  lines.push("origin="+location.origin);
+  lines.push("protocol="+location.protocol);
+  if(SYNC.staticMode){lines.push("后端接口：静态站点无后端，进度仅存本机");finishDiag(lines);return;}
+  httpRequest("GET","/api/health",null,3000,function(res){
+    lines.push("/api/health="+res.status+(res.ms!=null?(" ("+res.ms+"ms)"):""));
+    httpRequest("GET","/api/progress",null,3000,function(r2){
+      lines.push("/api/progress="+r2.status);
+      finishDiag(lines);
+    });
+  });
+}
+
+/* ---------- 启动即合并（仅 http/https；file:// 直接走本地） ---------- */
+function bootstrapSync(){
+  if(!isHttp()){setSyncStatus("local","offline");return;}
+  setSyncStatus("syncing");
+  httpRequest("GET","/api/progress",null,3000,function(res){
+    if(res.ok&&res.data&&res.data.attempts){
+      state.attempts=migrateAttempts(mergeAttempts(state.attempts,res.data.attempts));
+      saveState();
+      setSyncStatus("synced");
+      rerenderCurrent();
+    }else if(res.ok){
+      setSyncStatus("synced");
+    }else{
+      applyLocalFail(res);
+    }
+  });
+}
+function rerenderCurrent(){
+  if(view.screen==="home")safeRender(renderHome);
+  else if(view.screen==="chapter")safeRender(renderChapter);
+  else if(view.screen==="quiz")safeRender(renderQuestion);
+}
+
+/* ---------- 静态站点：Service Worker 与全量预缓存 ---------- */
+var PRECACHE={running:false,done:0,total:0};
+function registerSW(){
+  if(typeof navigator==="undefined"||!("serviceWorker" in navigator)){return Promise.reject(new Error("sw-unavailable"));}
+  if(navigator.serviceWorker.controller){return Promise.resolve({active:navigator.serviceWorker.controller});}
+  return navigator.serviceWorker.register("./sw.js").then(function(reg){return reg.ready;});
+}
+function swPrecacheAll(reg,chapters,onProgress){
+  return new Promise(function(resolve,reject){
+    var sw=reg&&reg.active||(navigator.serviceWorker&&navigator.serviceWorker.controller);
+    if(!sw){reject(new Error("no-controller"));return;}
+    var done=false;
+    var timer=setTimeout(function(){if(!done){done=true;reject(new Error("sw-precache-timeout"));}},180000);
+    function onMsg(ev){
+      var msg=ev.data||{};
+      if(msg.type==="precache-progress"){onProgress(msg.done,msg.total);}
+      else if(msg.type==="precache-done"){
+        clearTimeout(timer);done=true;
+        navigator.serviceWorker.removeEventListener("message",onMsg);
+        onProgress(msg.done,msg.total);resolve();
+      }
+    }
+    navigator.serviceWorker.addEventListener("message",onMsg);
+    sw.postMessage({type:"precache-all",chapters:chapters});
+  });
+}
+function lsPrecacheAll(chapters,onProgress){
+  var chain=Promise.resolve();
+  chapters.forEach(function(ch,idx){
+    chain=chain.then(function(){
+      return fetch("./data/ch"+pad2(ch)+".json").then(function(r){
+        if(!r.ok)throw new Error("HTTP "+r.status);
+        return r.json();
+      }).then(function(data){
+        var norm=normalizeChapter(data);
+        loaded[ch]=norm;writeCache(ch,norm);
+        onProgress(idx+1,chapters.length);
+      }).catch(function(){onProgress(idx+1,chapters.length);});
+    });
+  });
+  return chain;
+}
+function precacheAll(){
+  if(PRECACHE.running){alert("正在缓存全部章节，请稍候…");return;}
+  var btn=document.getElementById("btn-precache");
+  var chapters=(window.DATA.chapters||[]).map(function(c){return c.ch;});
+  if(!chapters.length){alert("目录为空，无法缓存。");return;}
+  PRECACHE.running=true;PRECACHE.done=0;PRECACHE.total=chapters.length;
+  function tick(done){if(btn)btn.textContent="缓存中 "+done+"/"+PRECACHE.total;}
+  tick(0);
+  registerSW().then(function(reg){
+    return swPrecacheAll(reg,chapters,function(d){PRECACHE.done=d;tick(d);});
+  }).catch(function(){
+    return lsPrecacheAll(chapters,function(d){PRECACHE.done=d;tick(d);});
+  }).then(function(){
+    PRECACHE.running=false;
+    if(btn)btn.textContent="已可离线使用";
+    alert("已可离线使用：全部章节已尽量缓存到本机。");
+  }).catch(function(e){
+    PRECACHE.running=false;
+    if(btn)btn.textContent="缓存失败";
+    alert("缓存未完成："+((e&&e.message)||e));
+  });
+}
+if("serviceWorker" in navigator){
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("./sw.js").catch(function(){});
+  });
+}
+
+/* ---------- 事件绑定 / 初始化 ---------- */
+document.getElementById("btn-export").onclick=exportState;
+var btnPre=document.getElementById("btn-precache");
+if(btnPre)btnPre.onclick=precacheAll;
+document.getElementById("btn-import").onclick=function(){document.getElementById("import-file").click();};
+document.getElementById("import-file").addEventListener("change",function(e){
+  if(e.target.files[0])importState(e.target.files[0]);
+  e.target.value="";
+});
+var menuBtn=document.getElementById("btn-menu");
+var menu=document.getElementById("header-menu");
+if(menuBtn)menuBtn.onclick=function(ev){ev.stopPropagation();menu.classList.toggle("open");};
+document.addEventListener("click",function(ev){
+  if(menu&&menu.classList.contains("open")&&!menu.contains(ev.target))menu.classList.remove("open");
+});
+
+initData();
+var dbg=document.getElementById("debug-unlock");
+dbg.checked=state.debugUnlock;
+dbg.onchange=function(){state.debugUnlock=dbg.checked;saveState();};
+if(state.mode)view.mode=state.mode;
+bootstrapSync();
+safeRender(renderHome);
+buildDiag();
+})();
+</script>
+</body>
+</html>
