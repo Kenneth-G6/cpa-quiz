@@ -1,6 +1,6 @@
 /* 刷题机 Service Worker（静态站点） */
-var CACHE_CORE = 'cpa-quiz-core-v6';
-var CACHE_DATA = 'cpa-quiz-data-v6';
+var CACHE_CORE = 'cpa-quiz-core-v7';
+var CACHE_DATA = 'cpa-quiz-data-v7';
 var CORE = ['./', './index.html', './manifest.webmanifest',
   './icons/icon-192.png', './icons/icon-512.png'];
 

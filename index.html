@@ -177,6 +177,18 @@
   .toggle{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);cursor:pointer;}
   input[type=file]{display:none;}
   .empty{text-align:center;color:var(--muted);padding:36px 0;}
+  .pill{display:inline-block;border-radius:7px;padding:1px 9px;font-size:13px;white-space:nowrap;}
+  .pill.not_started{color:var(--muted);background:var(--chip);}
+  .pill.reading{color:#2f5d8a;background:#eaf2f8;}
+  .pill.ready{color:var(--warn);background:#fbf4e4;}
+  .pill.done{color:var(--right);background:#eef6f0;}
+  .pill.review{color:var(--wrong);background:#fbeeec;}
+  .today-bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0;}
+  .today-bar i{display:block;height:100%;background:var(--accent);border-radius:6px;}
+  .group-head{display:flex;align-items:center;gap:8px;margin:18px 0 8px;font-weight:700;font-size:16px;}
+  .group-head .collapse-btn{margin-left:auto;}
+  .done-list{display:flex;flex-direction:column;gap:10px;}
+  .done-list.collapsed{display:none;}
   /* 头部菜单 */
   .top-row{display:flex;align-items:center;gap:10px;}
   .top-row1{flex:1;}
@@ -211,7 +223,7 @@
 <header class="top">
   <div class="top-inner">
     <div class="top-row top-row1">
-      <h1 id="top-title">刷题机 <span style="font-size:13px;color:var(--muted)">v6</span></h1>
+      <h1 id="top-title">刷题机 <span style="font-size:13px;color:var(--muted)">v7</span></h1>
       <span class="sync-badge syncing" id="sync-badge" title="进度同步状态">⟳ 加载中</span>
       <button class="btn small ghost menu-btn" id="btn-menu" aria-label="菜单">⋯</button>
     </div>
@@ -230,7 +242,7 @@
 
 <script id="inline-data">
 /*DATA-BEGIN*/
-window.INDEX = {"dataVersion":6,"generatedAt":"2026-11-25T21:08:53+08:00","chapters":[{"ch":1,"name":"第一章 总论","goal_text":"分清哪些事项该进账、按什么规矩确认和计量、记错会错在哪。","q_count":29,"k_count":33,"exam_types":"单选题/多选题/客观题","sections":[{"n":"第一节　会计概述","q":3,"skip":0},{"n":"第二节　财务报告目标、会计基本假设和会计基础","q":3,"skip":0},{"n":"第三节　会计信息质量要求","q":9,"skip":0},{"n":"第四节　会计要素及其确认与计量","q":11,"skip":0},{"n":"第五节　财务报告（略）","q":0,"skip":1},{"n":"第六节　可持续信息披露","q":3,"skip":0}]},{"ch":2,"name":"第二章 存货","goal_text":"存货按什么价入账、发出按什么方法结转、期末跌价怎么测怎么提。","q_count":34,"k_count":35,"exam_types":"","sections":[{"n":"第一节　存货的确认和初始计量","q":11,"skip":0},{"n":"第二节　发出存货的计量","q":7,"skip":0},{"n":"第三节　期末存货的计量","q":13,"skip":0},{"n":"第四节　存货的清查盘点","q":3,"skip":0}]},{"ch":3,"name":"第三章 固定资产","goal_text":"固定资产怎么入账、怎么提折旧、后续支出哪些资本化、处置和盘盈盘亏怎么记。","q_count":29,"k_count":30,"exam_types":"","sections":[{"n":"第一节　固定资产的确认和初始计量","q":9,"skip":0},{"n":"第二节　固定资产的后续计量","q":18,"skip":0},{"n":"第三节　固定资产的处置","q":2,"skip":0}]},{"ch":4,"name":"第四章 无形资产","goal_text":"辨认无形资产、确定入账成本、研究开发支出哪些能资本化、摊销与处置怎么处理。","q_count":25,"k_count":26,"exam_types":"客观题/主观题","sections":[{"n":"第一节　无形资产的确认和初始计量","q":10,"skip":0},{"n":"第二节　内部研究开发支出的确认与计量","q":4,"skip":0},{"n":"第三节　无形资产的后续计量","q":9,"skip":0},{"n":"第四节　无形资产的处置","q":2,"skip":0}]},{"ch":5,"name":"第五章 投资性房地产","goal_text":"哪些房地产算投资性房地产、两种后续计量模式怎么用、用途转换和处置怎么记账。","q_count":45,"k_count":25,"exam_types":"客观题/主观题","sections":[{"n":"第一节　投资性房地产的特征与范围","q":4,"skip":0},{"n":"第二节　投资性房地产的确认和计量","q":16,"skip":0},{"n":"第三节　投资性房地产的转换和处置","q":25,"skip":0}]},{"ch":6,"name":"第六章 长期股权投资与合营安排","goal_text":"长期股权投资初始怎么计量、成本法与权益法后续怎么调、方法转换、处置与共同经营怎么处理。","q_count":167,"k_count":110,"exam_types":"","sections":[{"n":"第一节　长期股权投资的初始计量","q":65,"skip":0},{"n":"第二节  长期股权投资的后续计量","q":64,"skip":0},{"n":"第三节　长期股权投资核算方法的转换","q":24,"skip":0},{"n":"第四节　合营安排","q":14,"skip":0}]},{"ch":7,"name":"第七章 资产减值","goal_text":"资产有没有减值迹象、可收回金额怎么算、资产组和商誉减值怎么分摊。","q_count":33,"k_count":26,"exam_types":"客观题/主观题","sections":[{"n":"第一节  资产减值概述","q":2,"skip":0},{"n":"第二节  资产可收回金额的计量","q":10,"skip":0},{"n":"第三节　资产减值损失的确认与计量","q":1,"skip":0},{"n":"第四节　资产组的认定及减值处理","q":10,"skip":0},{"n":"第五节　商誉减值测试与处理","q":10,"skip":0}]},{"ch":8,"name":"第八章 负债","goal_text":"各项流动负债与非流动负债怎么确认计量、应交税费和应付债券怎么记账。","q_count":29,"k_count":21,"exam_types":"客观题/主观题","sections":[{"n":"第一节　流动负债","q":21,"skip":0},{"n":"第二节　非流动负债","q":8,"skip":0}]},{"ch":9,"name":"第九章 职工薪酬","goal_text":"职工薪酬分哪几类、短期薪酬、离职后福利、辞退福利怎么确认计量和做账。","q_count":36,"k_count":34,"exam_types":"客观题/主观题","sections":[{"n":"第一节　职工和职工薪酬的范围及分类","q":3,"skip":0},{"n":"第二节　短期薪酬的确认与计量","q":17,"skip":0},{"n":"第三节　离职后福利的确认与计量","q":6,"skip":0},{"n":"第四节　辞退福利的确认与计量","q":8,"skip":0},{"n":"第五节　其他长期职工福利的确认与计量","q":2,"skip":0}]},{"ch":10,"name":"第十章 股份支付","goal_text":"能判断一项安排是否属于股份支付，区分权益结算与现金结算，按等待期完成费用分摊、条款修改、限制性股票与集团股份支付的账务处理。","q_count":79,"k_count":43,"exam_types":"计算分析题/综合题/客观题/主观题","sections":[{"n":"第一节　股份支付概述","q":14,"skip":0},{"n":"第二节　股份支付的确认和计量","q":65,"skip":0}]},{"ch":11,"name":"第十一章 借款费用","goal_text":"能界定借款费用范围与符合资本化条件的资产，判断开始/暂停/停止资本化时点，按专门借款、一般借款、辅助费用、外币汇兑差额规则计算资本化金额并写对分录。","q_count":33,"k_count":18,"exam_types":"单选题/多选题/客观题/主观题","sections":[{"n":"第一节　借款费用概述","q":5,"skip":0},{"n":"第二节　借款费用的确认","q":8,"skip":0},{"n":"第三节　借款费用的计量","q":20,"skip":0}]},{"ch":12,"name":"第十二章 或有事项","goal_text":"能区分或有负债/或有资产与预计负债，按三条件确认预计负债并用最佳估计数计量，处理未决诉讼、质量保证、亏损合同、重组义务的分录与列报披露。","q_count":43,"k_count":25,"exam_types":"客观题/主观题","sections":[{"n":"第一节　或有事项概述","q":4,"skip":0},{"n":"第二节　或有事项的确认和计量","q":17,"skip":0},{"n":"第三节  或有事项会计处理的具体应用","q":19,"skip":0},{"n":"第四节　或有事项的列报","q":3,"skip":0}]},{"ch":13,"name":"第十三章 金融工具","goal_text":"能对金融资产/负债作三分类与负债权益区分，按摊余成本或公允价值完成初始与后续计量、减值三阶段、重分类、转移终止确认与套期会计处理，正确选用科目与借贷方向。","q_count":180,"k_count":97,"exam_types":"主观题","sections":[{"n":"第一节　金融工具概述","q":2,"skip":0},{"n":"第二节　金融资产和金融负债的分类","q":25,"skip":0},{"n":"第三节　金融负债和权益工具的区分","q":48,"skip":0},{"n":"第四节　金融工具的计量和重分类","q":49,"skip":0},{"n":"第五节　金融资产转移","q":24,"skip":0},{"n":"第六节　套期会计","q":27,"skip":0},{"n":"第七节　金融工具的披露","q":5,"skip":0}]},{"ch":14,"name":"第十四章 租赁","goal_text":"能识别租赁并完成承租人、出租人各环节的科目选择、借贷方向与金额计量，处理租赁变更、转租赁与售后租回。","q_count":121,"k_count":68,"exam_types":"","sections":[{"n":"第一节　租赁概述","q":17,"skip":0},{"n":"第二节　承租人会计处理","q":59,"skip":0},{"n":"第三节　出租人会计处理","q":20,"skip":0},{"n":"第四节　特殊租赁业务的会计处理","q":25,"skip":0}]},{"ch":15,"name":"第十五章 持有待售的非流动资产、处置组和终止经营","goal_text":"能判断非流动资产或处置组是否划分为持有待售、是否构成终止经营，完成计量减值、转回与列报。","q_count":52,"k_count":24,"exam_types":"","sections":[{"n":"第一节　持有待售的非流动资产和处置组","q":41,"skip":0},{"n":"第二节　终止经营","q":11,"skip":0}]},{"ch":16,"name":"第十六章 所有者权益","goal_text":"能区分实收资本、其他权益工具、资本公积、其他综合收益与留存收益的归属，完成增减资、溢价、股份支付、转增与弥补亏损的科目选择、借贷方向与列报。","q_count":25,"k_count":21,"exam_types":"客观题/主观题","sections":[{"n":"第一节　实收资本","q":5,"skip":0},{"n":"第二节　其他权益工具","q":4,"skip":0},{"n":"第三节  资本公积、其他综合收益及留存收益","q":16,"skip":0}]},{"ch":17,"name":"第十七章 收入、费用和利润","goal_text":"能按五步法识别合同与履约义务、确定交易价格并分摊，判断时段/时点确认，处理特定交易、合同成本及费用利润结转。","q_count":138,"k_count":56,"exam_types":"客观题/主观题","sections":[{"n":"第一节　收入","q":117,"skip":0},{"n":"第二节　费用","q":6,"skip":0},{"n":"第三节　利润","q":15,"skip":0}]},{"ch":18,"name":"第十八章 政府补助","goal_text":"能区分政府补助与收入、处置利得，判断与资产/与收益相关，按总额法或净额法完成补助的确认、计量与列报。","q_count":59,"k_count":28,"exam_types":"主观题","sections":[{"n":"第一节　政府补助的概述","q":14,"skip":0},{"n":"第二节　政府补助的会计处理","q":43,"skip":0},{"n":"第三节　政府补助的列报","q":2,"skip":0}]},{"ch":19,"name":"第十九章 所得税","goal_text":"能判断资产、负债的计税基础与暂时性差异类型，确认递延所得税资产/负债，计算当期所得税与所得税费用并完成列报。","q_count":99,"k_count":51,"exam_types":"主观题","sections":[{"n":"第一节　所得税会计的基本原理","q":13,"skip":0},{"n":"第二节　资产、负债的计税基础","q":50,"skip":0},{"n":"第三节　暂时性差异","q":4,"skip":0},{"n":"第四节　递延所得税资产及负债的确认和计量","q":23,"skip":0},{"n":"第五节  所得税费用的确认和计量","q":8,"skip":0},{"n":"第六节　所得税的列报","q":1,"skip":0}]},{"ch":20,"name":"第二十章 非货币性资产交换","goal_text":"能识别非货币性资产交换、判断商业实质与补价，按公允价值或账面价值为基础完成换入、换出资产的计量与分录。","q_count":33,"k_count":21,"exam_types":"客观题/主观题","sections":[{"n":"第一节  非货币性资产交换的概念","q":7,"skip":0},{"n":"第二节　非货币性资产交换的确认和计量","q":5,"skip":0},{"n":"第三节　非货币性资产交换的会计处理","q":21,"skip":0}]},{"ch":21,"name":"第二十一章 债务重组","goal_text":"能区分债务人/债权人身份与重组方式（资产清偿、债转股、修改条款、组合方式），完成终止确认与损益计量分录。","q_count":35,"k_count":19,"exam_types":"客观题/主观题","sections":[{"n":"第一节  债务重组的定义和方式","q":7,"skip":0},{"n":"第二节  债务重组的会计处理","q":26,"skip":0},{"n":"第三节　债务重组的相关披露","q":2,"skip":0}]},{"ch":22,"name":"第二十二章 外币折算","goal_text":"能选择记账本位币与即期/近似汇率，区分外币交易初始确认与期末汇兑差额处理，完成境外经营财务报表折算。","q_count":52,"k_count":18,"exam_types":"综合题/客观题","sections":[{"n":"第一节　记账本位币的确定","q":5,"skip":0},{"n":"第二节　外币交易的会计处理","q":36,"skip":0},{"n":"第三节　外币财务报表折算","q":11,"skip":0}]},{"ch":23,"name":"第二十三章 财务报告","goal_text":"能按准则完成资产负债表、利润表、现金流量表（直接法/间接法）、所有者权益变动表与附注项目的归类、填列与现金流量分类。","q_count":72,"k_count":60,"exam_types":"客观题","sections":[{"n":"第一节　财务报表概述","q":5,"skip":0},{"n":"第二节　资产负债表","q":9,"skip":0},{"n":"第三节　利润表","q":1,"skip":0},{"n":"第四节　现金流量表","q":32,"skip":0},{"n":"第五节　所有者权益变动表","q":1,"skip":0},{"n":"第六节　财务报表附注披露","q":12,"skip":0},{"n":"第七节  中期财务报告","q":12,"skip":0}]},{"ch":24,"name":"第二十四章 会计政策、会计估计及其变更和差错更正","goal_text":"能区分会计政策变更、会计估计变更与前期差错更正，判断追溯调整法/未来适用法/追溯重述法并完成更正与披露。","q_count":38,"k_count":24,"exam_types":"综合题/客观题","sections":[{"n":"第一节　会计政策及其变更概述","q":7,"skip":0},{"n":"第二节　会计估计及其变更概述","q":5,"skip":0},{"n":"第三节　会计政策与会计估计变更的划分","q":2,"skip":0},{"n":"第四节　会计政策和会计估计变更的会计处理","q":13,"skip":0},{"n":"第五节  前期差错及其更正","q":11,"skip":0}]},{"ch":25,"name":"第二十五章 资产负债表日后事项","goal_text":"能区分调整事项与非调整事项，判断资产负债表日后事项类型，完成调整分录、报表调整与附注披露。","q_count":29,"k_count":16,"exam_types":"客观题/主观题","sections":[{"n":"第一节　资产负债表日后事项概述","q":9,"skip":0},{"n":"第二节　调整事项的会计处理","q":16,"skip":0},{"n":"第三节　非调整事项的会计处理","q":4,"skip":0}]},{"ch":26,"name":"第二十六章 企业合并","goal_text":"能区分同一控制/非同一控制下企业合并类型（控股合并/吸收合并），完成合并日长期股权投资、商誉或资本公积处理及相关调整。","q_count":34,"k_count":24,"exam_types":"","sections":[{"n":"第一节  企业合并概述","q":7,"skip":0},{"n":"第二节  企业合并的会计处理","q":27,"skip":0}]},{"ch":27,"name":"第二十七章 合并财务报表","goal_text":"能判断控制与合并范围，完成购买日及购买日后成本法转权益法、抵权益抵损益，抵销内部商品、债权债务、固定资产、无形资产交易，并处理追加投资、处置股权、交叉持股等特殊交易的合并编制。","q_count":214,"k_count":134,"exam_types":"综合题","sections":[{"n":"第一节　合并范围的确定","q":15,"skip":0},{"n":"第二节　合并财务报表编制原则、前期准备事项及其程序","q":4,"skip":0},{"n":"第三节　长期股权投资与所有者权益的合并处理（同一控制下企业合并）","q":9,"skip":0},{"n":"第四节　长期股权投资与所有者权益的合并处理（非同一控制下企业合并）","q":18,"skip":0},{"n":"第五节  内部商品交易的合并处理","q":30,"skip":0},{"n":"第六节  内部债权债务的合并处理","q":17,"skip":0},{"n":"第七节　内部固定资产交易的合并处理","q":26,"skip":0},{"n":"第八节　内部无形资产交易的合并处理","q":7,"skip":0},{"n":"第九节　特殊交易在合并财务报表中的会计处理","q":59,"skip":0},{"n":"第十节　所得税会计相关的合并处理","q":0,"skip":1},{"n":"第十一节　合并现金流量表的编制","q":29,"skip":0}]},{"ch":28,"name":"第二十八章 每股收益","goal_text":"能确定基本每股收益的分子与分母，识别可转换债券、认股权证、股份期权、限制性股票、回购合同等潜在普通股的稀释性，计算稀释每股收益，并完成列报与重新计算。","q_count":58,"k_count":40,"exam_types":"综合题/客观题","sections":[{"n":"第一节　每股收益的基本概念","q":0,"skip":1},{"n":"第二节　基本每股收益","q":11,"skip":0},{"n":"第三节　稀释每股收益","q":37,"skip":0},{"n":"第四节　每股收益的列报","q":10,"skip":0}]},{"ch":29,"name":"第二十九章 公允价值计量","goal_text":"能界定有序交易、主要市场或最有利市场与市场参与者，选用市场法、收益法、成本法，区分输入值公允价值层次，处理非金融资产最佳用途及可抵销金融项目的公允价值计量。","q_count":30,"k_count":23,"exam_types":"单选题/多选题","sections":[{"n":"第一节　公允价值概述","q":11,"skip":0},{"n":"第二节　公允价值计量要求","q":15,"skip":0},{"n":"第三节　公允价值计量的具体应用","q":4,"skip":0}]},{"ch":30,"name":"第三十章 政府及民间非营利组织会计","goal_text":"能区分预算会计与财务会计的核算基础，完成财政及非财政拨款收支、结转结余、净资产、资产、负债业务，以及民间非营利组织受托代理、收入费用等业务的双分录核算与报表编制。","q_count":144,"k_count":82,"exam_types":"客观题","sections":[{"n":"第一节　政府会计概述","q":9,"skip":0},{"n":"第二节　政府单位特定业务的会计核算","q":94,"skip":0},{"n":"第三节　民间非营利组织会计","q":41,"skip":0}]}]};
+window.INDEX = {"dataVersion":7,"generatedAt":"2026-11-25T22:35:09+08:00","chapters":[{"ch":1,"name":"第一章 总论","goal_text":"分清哪些事项该进账、按什么规矩确认和计量、记错会错在哪。","q_count":29,"k_count":33,"exam_types":"单选题/多选题/客观题","plan_order":1,"sections":[{"n":"第一节　会计概述","q":3,"skip":0},{"n":"第二节　财务报告目标、会计基本假设和会计基础","q":3,"skip":0},{"n":"第三节　会计信息质量要求","q":9,"skip":0},{"n":"第四节　会计要素及其确认与计量","q":11,"skip":0},{"n":"第五节　财务报告（略）","q":0,"skip":1},{"n":"第六节　可持续信息披露","q":3,"skip":0}]},{"ch":2,"name":"第二章 存货","goal_text":"存货按什么价入账、发出按什么方法结转、期末跌价怎么测怎么提。","q_count":34,"k_count":35,"exam_types":"","plan_order":2,"sections":[{"n":"第一节　存货的确认和初始计量","q":11,"skip":0},{"n":"第二节　发出存货的计量","q":7,"skip":0},{"n":"第三节　期末存货的计量","q":13,"skip":0},{"n":"第四节　存货的清查盘点","q":3,"skip":0}]},{"ch":3,"name":"第三章 固定资产","goal_text":"固定资产怎么入账、怎么提折旧、后续支出哪些资本化、处置和盘盈盘亏怎么记。","q_count":29,"k_count":30,"exam_types":"","plan_order":3,"sections":[{"n":"第一节　固定资产的确认和初始计量","q":9,"skip":0},{"n":"第二节　固定资产的后续计量","q":18,"skip":0},{"n":"第三节　固定资产的处置","q":2,"skip":0}]},{"ch":4,"name":"第四章 无形资产","goal_text":"辨认无形资产、确定入账成本、研究开发支出哪些能资本化、摊销与处置怎么处理。","q_count":25,"k_count":26,"exam_types":"客观题/主观题","plan_order":4,"sections":[{"n":"第一节　无形资产的确认和初始计量","q":10,"skip":0},{"n":"第二节　内部研究开发支出的确认与计量","q":4,"skip":0},{"n":"第三节　无形资产的后续计量","q":9,"skip":0},{"n":"第四节　无形资产的处置","q":2,"skip":0}]},{"ch":5,"name":"第五章 投资性房地产","goal_text":"哪些房地产算投资性房地产、两种后续计量模式怎么用、用途转换和处置怎么记账。","q_count":45,"k_count":25,"exam_types":"客观题/主观题","plan_order":5,"sections":[{"n":"第一节　投资性房地产的特征与范围","q":4,"skip":0},{"n":"第二节　投资性房地产的确认和计量","q":16,"skip":0},{"n":"第三节　投资性房地产的转换和处置","q":25,"skip":0}]},{"ch":6,"name":"第六章 长期股权投资与合营安排","goal_text":"长期股权投资初始怎么计量、成本法与权益法后续怎么调、方法转换、处置与共同经营怎么处理。","q_count":167,"k_count":110,"exam_types":"","plan_order":7,"sections":[{"n":"第一节　长期股权投资的初始计量","q":65,"skip":0},{"n":"第二节  长期股权投资的后续计量","q":64,"skip":0},{"n":"第三节　长期股权投资核算方法的转换","q":24,"skip":0},{"n":"第四节　合营安排","q":14,"skip":0}]},{"ch":7,"name":"第七章 资产减值","goal_text":"资产有没有减值迹象、可收回金额怎么算、资产组和商誉减值怎么分摊。","q_count":33,"k_count":26,"exam_types":"客观题/主观题","plan_order":8,"sections":[{"n":"第一节  资产减值概述","q":2,"skip":0},{"n":"第二节  资产可收回金额的计量","q":10,"skip":0},{"n":"第三节　资产减值损失的确认与计量","q":1,"skip":0},{"n":"第四节　资产组的认定及减值处理","q":10,"skip":0},{"n":"第五节　商誉减值测试与处理","q":10,"skip":0}]},{"ch":8,"name":"第八章 负债","goal_text":"各项流动负债与非流动负债怎么确认计量、应交税费和应付债券怎么记账。","q_count":29,"k_count":21,"exam_types":"客观题/主观题","plan_order":6,"sections":[{"n":"第一节　流动负债","q":21,"skip":0},{"n":"第二节　非流动负债","q":8,"skip":0}]},{"ch":9,"name":"第九章 职工薪酬","goal_text":"职工薪酬分哪几类、短期薪酬、离职后福利、辞退福利怎么确认计量和做账。","q_count":36,"k_count":34,"exam_types":"客观题/主观题","plan_order":9,"sections":[{"n":"第一节　职工和职工薪酬的范围及分类","q":3,"skip":0},{"n":"第二节　短期薪酬的确认与计量","q":17,"skip":0},{"n":"第三节　离职后福利的确认与计量","q":6,"skip":0},{"n":"第四节　辞退福利的确认与计量","q":8,"skip":0},{"n":"第五节　其他长期职工福利的确认与计量","q":2,"skip":0}]},{"ch":10,"name":"第十章 股份支付","goal_text":"能判断一项安排是否属于股份支付，区分权益结算与现金结算，按等待期完成费用分摊、条款修改、限制性股票与集团股份支付的账务处理。","q_count":79,"k_count":43,"exam_types":"计算分析题/综合题/客观题/主观题","plan_order":16,"sections":[{"n":"第一节　股份支付概述","q":14,"skip":0},{"n":"第二节　股份支付的确认和计量","q":65,"skip":0}]},{"ch":11,"name":"第十一章 借款费用","goal_text":"能界定借款费用范围与符合资本化条件的资产，判断开始/暂停/停止资本化时点，按专门借款、一般借款、辅助费用、外币汇兑差额规则计算资本化金额并写对分录。","q_count":33,"k_count":18,"exam_types":"单选题/多选题/客观题/主观题","plan_order":11,"sections":[{"n":"第一节　借款费用概述","q":5,"skip":0},{"n":"第二节　借款费用的确认","q":8,"skip":0},{"n":"第三节　借款费用的计量","q":20,"skip":0}]},{"ch":12,"name":"第十二章 或有事项","goal_text":"能区分或有负债/或有资产与预计负债，按三条件确认预计负债并用最佳估计数计量，处理未决诉讼、质量保证、亏损合同、重组义务的分录与列报披露。","q_count":43,"k_count":25,"exam_types":"客观题/主观题","plan_order":17,"sections":[{"n":"第一节　或有事项概述","q":4,"skip":0},{"n":"第二节　或有事项的确认和计量","q":17,"skip":0},{"n":"第三节  或有事项会计处理的具体应用","q":19,"skip":0},{"n":"第四节　或有事项的列报","q":3,"skip":0}]},{"ch":13,"name":"第十三章 金融工具","goal_text":"能对金融资产/负债作三分类与负债权益区分，按摊余成本或公允价值完成初始与后续计量、减值三阶段、重分类、转移终止确认与套期会计处理，正确选用科目与借贷方向。","q_count":180,"k_count":97,"exam_types":"主观题","plan_order":12,"sections":[{"n":"第一节　金融工具概述","q":2,"skip":0},{"n":"第二节　金融资产和金融负债的分类","q":25,"skip":0},{"n":"第三节　金融负债和权益工具的区分","q":48,"skip":0},{"n":"第四节　金融工具的计量和重分类","q":49,"skip":0},{"n":"第五节　金融资产转移","q":24,"skip":0},{"n":"第六节　套期会计","q":27,"skip":0},{"n":"第七节　金融工具的披露","q":5,"skip":0}]},{"ch":14,"name":"第十四章 租赁","goal_text":"能识别租赁并完成承租人、出租人各环节的科目选择、借贷方向与金额计量，处理租赁变更、转租赁与售后租回。","q_count":121,"k_count":68,"exam_types":"","plan_order":13,"sections":[{"n":"第一节　租赁概述","q":17,"skip":0},{"n":"第二节　承租人会计处理","q":59,"skip":0},{"n":"第三节　出租人会计处理","q":20,"skip":0},{"n":"第四节　特殊租赁业务的会计处理","q":25,"skip":0}]},{"ch":15,"name":"第十五章 持有待售的非流动资产、处置组和终止经营","goal_text":"能判断非流动资产或处置组是否划分为持有待售、是否构成终止经营，完成计量减值、转回与列报。","q_count":52,"k_count":24,"exam_types":"","plan_order":26,"sections":[{"n":"第一节　持有待售的非流动资产和处置组","q":41,"skip":0},{"n":"第二节　终止经营","q":11,"skip":0}]},{"ch":16,"name":"第十六章 所有者权益","goal_text":"能区分实收资本、其他权益工具、资本公积、其他综合收益与留存收益的归属，完成增减资、溢价、股份支付、转增与弥补亏损的科目选择、借贷方向与列报。","q_count":25,"k_count":21,"exam_types":"客观题/主观题","plan_order":10,"sections":[{"n":"第一节　实收资本","q":5,"skip":0},{"n":"第二节　其他权益工具","q":4,"skip":0},{"n":"第三节  资本公积、其他综合收益及留存收益","q":16,"skip":0}]},{"ch":17,"name":"第十七章 收入、费用和利润","goal_text":"能按五步法识别合同与履约义务、确定交易价格并分摊，判断时段/时点确认，处理特定交易、合同成本及费用利润结转。","q_count":138,"k_count":56,"exam_types":"客观题/主观题","plan_order":14,"sections":[{"n":"第一节　收入","q":117,"skip":0},{"n":"第二节　费用","q":6,"skip":0},{"n":"第三节　利润","q":15,"skip":0}]},{"ch":18,"name":"第十八章 政府补助","goal_text":"能区分政府补助与收入、处置利得，判断与资产/与收益相关，按总额法或净额法完成补助的确认、计量与列报。","q_count":59,"k_count":28,"exam_types":"主观题","plan_order":15,"sections":[{"n":"第一节　政府补助的概述","q":14,"skip":0},{"n":"第二节　政府补助的会计处理","q":43,"skip":0},{"n":"第三节　政府补助的列报","q":2,"skip":0}]},{"ch":19,"name":"第十九章 所得税","goal_text":"能判断资产、负债的计税基础与暂时性差异类型，确认递延所得税资产/负债，计算当期所得税与所得税费用并完成列报。","q_count":99,"k_count":51,"exam_types":"主观题","plan_order":18,"sections":[{"n":"第一节　所得税会计的基本原理","q":13,"skip":0},{"n":"第二节　资产、负债的计税基础","q":50,"skip":0},{"n":"第三节　暂时性差异","q":4,"skip":0},{"n":"第四节　递延所得税资产及负债的确认和计量","q":23,"skip":0},{"n":"第五节  所得税费用的确认和计量","q":8,"skip":0},{"n":"第六节　所得税的列报","q":1,"skip":0}]},{"ch":20,"name":"第二十章 非货币性资产交换","goal_text":"能识别非货币性资产交换、判断商业实质与补价，按公允价值或账面价值为基础完成换入、换出资产的计量与分录。","q_count":33,"k_count":21,"exam_types":"客观题/主观题","plan_order":19,"sections":[{"n":"第一节  非货币性资产交换的概念","q":7,"skip":0},{"n":"第二节　非货币性资产交换的确认和计量","q":5,"skip":0},{"n":"第三节　非货币性资产交换的会计处理","q":21,"skip":0}]},{"ch":21,"name":"第二十一章 债务重组","goal_text":"能区分债务人/债权人身份与重组方式（资产清偿、债转股、修改条款、组合方式），完成终止确认与损益计量分录。","q_count":35,"k_count":19,"exam_types":"客观题/主观题","plan_order":21,"sections":[{"n":"第一节  债务重组的定义和方式","q":7,"skip":0},{"n":"第二节  债务重组的会计处理","q":26,"skip":0},{"n":"第三节　债务重组的相关披露","q":2,"skip":0}]},{"ch":22,"name":"第二十二章 外币折算","goal_text":"能选择记账本位币与即期/近似汇率，区分外币交易初始确认与期末汇兑差额处理，完成境外经营财务报表折算。","q_count":52,"k_count":18,"exam_types":"综合题/客观题","plan_order":22,"sections":[{"n":"第一节　记账本位币的确定","q":5,"skip":0},{"n":"第二节　外币交易的会计处理","q":36,"skip":0},{"n":"第三节　外币财务报表折算","q":11,"skip":0}]},{"ch":23,"name":"第二十三章 财务报告","goal_text":"能按准则完成资产负债表、利润表、现金流量表（直接法/间接法）、所有者权益变动表与附注项目的归类、填列与现金流量分类。","q_count":72,"k_count":60,"exam_types":"客观题","plan_order":27,"sections":[{"n":"第一节　财务报表概述","q":5,"skip":0},{"n":"第二节　资产负债表","q":9,"skip":0},{"n":"第三节　利润表","q":1,"skip":0},{"n":"第四节　现金流量表","q":32,"skip":0},{"n":"第五节　所有者权益变动表","q":1,"skip":0},{"n":"第六节　财务报表附注披露","q":12,"skip":0},{"n":"第七节  中期财务报告","q":12,"skip":0}]},{"ch":24,"name":"第二十四章 会计政策、会计估计及其变更和差错更正","goal_text":"能区分会计政策变更、会计估计变更与前期差错更正，判断追溯调整法/未来适用法/追溯重述法并完成更正与披露。","q_count":38,"k_count":24,"exam_types":"综合题/客观题","plan_order":24,"sections":[{"n":"第一节　会计政策及其变更概述","q":7,"skip":0},{"n":"第二节　会计估计及其变更概述","q":5,"skip":0},{"n":"第三节　会计政策与会计估计变更的划分","q":2,"skip":0},{"n":"第四节　会计政策和会计估计变更的会计处理","q":13,"skip":0},{"n":"第五节  前期差错及其更正","q":11,"skip":0}]},{"ch":25,"name":"第二十五章 资产负债表日后事项","goal_text":"能区分调整事项与非调整事项，判断资产负债表日后事项类型，完成调整分录、报表调整与附注披露。","q_count":29,"k_count":16,"exam_types":"客观题/主观题","plan_order":25,"sections":[{"n":"第一节　资产负债表日后事项概述","q":9,"skip":0},{"n":"第二节　调整事项的会计处理","q":16,"skip":0},{"n":"第三节　非调整事项的会计处理","q":4,"skip":0}]},{"ch":26,"name":"第二十六章 企业合并","goal_text":"能区分同一控制/非同一控制下企业合并类型（控股合并/吸收合并），完成合并日长期股权投资、商誉或资本公积处理及相关调整。","q_count":34,"k_count":24,"exam_types":"","plan_order":20,"sections":[{"n":"第一节  企业合并概述","q":7,"skip":0},{"n":"第二节  企业合并的会计处理","q":27,"skip":0}]},{"ch":27,"name":"第二十七章 合并财务报表","goal_text":"能判断控制与合并范围，完成购买日及购买日后成本法转权益法、抵权益抵损益，抵销内部商品、债权债务、固定资产、无形资产交易，并处理追加投资、处置股权、交叉持股等特殊交易的合并编制。","q_count":214,"k_count":134,"exam_types":"综合题","plan_order":23,"sections":[{"n":"第一节　合并范围的确定","q":15,"skip":0},{"n":"第二节　合并财务报表编制原则、前期准备事项及其程序","q":4,"skip":0},{"n":"第三节　长期股权投资与所有者权益的合并处理（同一控制下企业合并）","q":9,"skip":0},{"n":"第四节　长期股权投资与所有者权益的合并处理（非同一控制下企业合并）","q":18,"skip":0},{"n":"第五节  内部商品交易的合并处理","q":30,"skip":0},{"n":"第六节  内部债权债务的合并处理","q":17,"skip":0},{"n":"第七节　内部固定资产交易的合并处理","q":26,"skip":0},{"n":"第八节　内部无形资产交易的合并处理","q":7,"skip":0},{"n":"第九节　特殊交易在合并财务报表中的会计处理","q":59,"skip":0},{"n":"第十节　所得税会计相关的合并处理","q":0,"skip":1},{"n":"第十一节　合并现金流量表的编制","q":29,"skip":0}]},{"ch":28,"name":"第二十八章 每股收益","goal_text":"能确定基本每股收益的分子与分母，识别可转换债券、认股权证、股份期权、限制性股票、回购合同等潜在普通股的稀释性，计算稀释每股收益，并完成列报与重新计算。","q_count":58,"k_count":40,"exam_types":"综合题/客观题","plan_order":28,"sections":[{"n":"第一节　每股收益的基本概念","q":0,"skip":1},{"n":"第二节　基本每股收益","q":11,"skip":0},{"n":"第三节　稀释每股收益","q":37,"skip":0},{"n":"第四节　每股收益的列报","q":10,"skip":0}]},{"ch":29,"name":"第二十九章 公允价值计量","goal_text":"能界定有序交易、主要市场或最有利市场与市场参与者，选用市场法、收益法、成本法，区分输入值公允价值层次，处理非金融资产最佳用途及可抵销金融项目的公允价值计量。","q_count":30,"k_count":23,"exam_types":"单选题/多选题","plan_order":29,"sections":[{"n":"第一节　公允价值概述","q":11,"skip":0},{"n":"第二节　公允价值计量要求","q":15,"skip":0},{"n":"第三节　公允价值计量的具体应用","q":4,"skip":0}]},{"ch":30,"name":"第三十章 政府及民间非营利组织会计","goal_text":"能区分预算会计与财务会计的核算基础，完成财政及非财政拨款收支、结转结余、净资产、资产、负债业务，以及民间非营利组织受托代理、收入费用等业务的双分录核算与报表编制。","q_count":144,"k_count":82,"exam_types":"客观题","plan_order":30,"sections":[{"n":"第一节　政府会计概述","q":9,"skip":0},{"n":"第二节　政府单位特定业务的会计核算","q":94,"skip":0},{"n":"第三节　民间非营利组织会计","q":41,"skip":0}]}]};
 /*DATA-END*/
 </script>
 <script>
@@ -238,6 +250,10 @@ window.INDEX = {"dataVersion":6,"generatedAt":"2026-11-25T21:08:53+08:00","chapt
 "use strict";
 var LS_KEY="cpa_quiz_v4";
 var PASS_ACC=0.8;
+var COV_READING=0.60;
+var COV_DONE=0.80;
+var TODAY_GOAL=25;
+var SPACING=[1,3,7];
 var CACHE_PREFIX="cpa_ch_";
 var CACHE_MAX=3;
 var CACHE_BUDGET=2.5*1024*1024;
@@ -283,35 +299,46 @@ function chOfQid(qid){var m=/^CH(\d+)-/.exec(qid||"");return m?parseInt(m[1],10)
 function sectionOf(q){return q.section_norm||q.section||"";}
 
 /* ---------- 本地状态 ---------- */
-function defaultState(){return {attempts:{},debugUnlock:false,mode:"R1"};}
+function defaultState(){return {attempts:{},chapterPass:{},debugUnlock:false,mode:"R1"};}
 function migrateAttempts(att){
+  var now=Date.now();
   Object.keys(att).forEach(function(k){
     var a=att[k];
     if(typeof a!=="object")return;
     if(typeof a.inWrong!=="boolean"){a.inWrong=(a.verdict==="wrong");}
     if(typeof a.consecRight!=="number"){a.consecRight=0;}
+    if(typeof a.lastTs!=="number"){a.lastTs=now;}
+    if(typeof a.rightCount!=="number"){a.rightCount=(a.verdict==="right"?1:0);}
+    if(typeof a.wrongCount!=="number"){a.wrongCount=(a.verdict==="wrong"?1:0);}
+    if(typeof a.cleared!=="boolean"){a.cleared=false;}
   });
   return att;
+}
+function migrateState(s){
+  if(!s||typeof s!=="object")return defaultState();
+  if(typeof s.attempts!=="object"||!s.attempts)s.attempts={};
+  s.attempts=migrateAttempts(s.attempts);
+  if(typeof s.chapterPass!=="object"||!s.chapterPass)s.chapterPass={};
+  return assign(defaultState(),s);
 }
 function loadState(){
   try{
     var s=JSON.parse(localStorage.getItem(LS_KEY));
-    if(s&&typeof s.attempts==="object"){
-      s.attempts=migrateAttempts(s.attempts);
-      return assign(defaultState(),s);
-    }
+    if(s&&typeof s.attempts==="object"){return migrateState(s);}
   }catch(e){}
   return defaultState();
 }
 function saveState(){localStorage.setItem(LS_KEY,JSON.stringify(state));}
 var state=loadState();
-var view={screen:"home",ch:null,mode:"R1",section:null,queue:[],idx:0};
+var view={screen:"home",ch:null,mode:"R1",section:null,queue:[],idx:0,autoStart:false};
+var doneCollapsed=true;
 
-/* ---------- 统计 / 闸门 ---------- */
+/* ---------- 统计 / 状态机 ---------- */
+function planOrder(c){return (c&&typeof c.plan_order==="number")?c.plan_order:c.ch;}
 function stats(ch){
   var meta=metaOf(ch);
-  var total=meta&&meta.q_count?meta.q_count:questionsOf(ch).length;
-  var answered=0,right=0,wrong=0;
+  var total=(meta&&typeof meta.q_count==="number")?meta.q_count:questionsOf(ch).length;
+  var answered=0,right=0;
   for(var k in state.attempts){
     if(!Object.prototype.hasOwnProperty.call(state.attempts,k))continue;
     if(chOfQid(k)!==ch)continue;
@@ -319,22 +346,79 @@ function stats(ch){
     if(a&&(a.verdict==="right"||a.verdict==="wrong")){
       answered++;
       if(a.verdict==="right")right++;
-      if(a.inWrong)wrong++;
     }
   }
+  var inWrongCount=0;
+  for(var k2 in state.attempts){
+    if(!Object.prototype.hasOwnProperty.call(state.attempts,k2))continue;
+    if(chOfQid(k2)!==ch)continue;
+    var a2=state.attempts[k2];
+    if(a2&&a2.inWrong&&!a2.cleared)inWrongCount++;
+  }
   var accuracy=answered?right/answered:null;
-  var passed=total>0&&answered>=total&&accuracy!==null&&accuracy>=PASS_ACC;
-  return {total:total,answered:answered,right:right,wrong:wrong,accuracy:accuracy,passed:passed};
+  var coverage=total>0?answered/total:0;
+  var pass=!!(state.chapterPass&&state.chapterPass[ch]);
+  return {total:total,answered:answered,right:right,wrong:inWrongCount,accuracy:accuracy,coverage:coverage,pass:pass,passed:pass};
+}
+function isDueAttempt(a){return !!a&&a.inWrong&&!a.cleared&&typeof a.dueAt==="number"&&a.dueAt<=Date.now();}
+function dueWrongOfChapter(ch){
+  var n=0;
+  for(var k in state.attempts){
+    if(!Object.prototype.hasOwnProperty.call(state.attempts,k))continue;
+    var a=state.attempts[k];
+    if(a&&chOfQid(k)===ch&&isDueAttempt(a))n++;
+  }
+  return n;
+}
+function dueWrongAll(){
+  var n=0;
+  for(var k in state.attempts){if(isDueAttempt(state.attempts[k]))n++;}
+  return n;
+}
+function todayAnswered(){
+  var now=new Date();
+  var day=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime();
+  var n=0;
+  for(var k in state.attempts){
+    var a=state.attempts[k];
+    if(a&&typeof a.lastTs==="number"){
+      var d=new Date(a.lastTs);
+      if(new Date(d.getFullYear(),d.getMonth(),d.getDate()).getTime()===day)n++;
+    }
+  }
+  return n;
+}
+function chapterState(ch){
+  var s=stats(ch);
+  if(s.answered===0)return "not_started";
+  if(s.pass&&s.coverage>=COV_DONE)return dueWrongOfChapter(ch)>0?"review":"done";
+  if(s.coverage>=COV_READING)return "ready";
+  return "reading";
+}
+var STATE_LABEL={not_started:"未开始",reading:"在读",ready:"待通关",done:"已完成",review:"待复习"};
+function sortedChapters(){
+  return window.DATA.chapters.slice().sort(function(a,b){
+    var oa=planOrder(a),ob=planOrder(b);
+    return oa===ob?a.ch-b.ch:oa-ob;
+  });
+}
+function nextIncomplete(ch){
+  var arr=sortedChapters();
+  var idx=-1,i,j;
+  for(i=0;i<arr.length;i++)if(arr[i].ch===ch)idx=i;
+  for(j=idx+1;j<arr.length;j++)if(!(state.chapterPass&&state.chapterPass[arr[j].ch]))return arr[j];
+  for(j=0;j<idx;j++)if(!(state.chapterPass&&state.chapterPass[arr[j].ch]))return arr[j];
+  return null;
 }
 function isLocked(ch){
   if(ch<=1)return false;
   if(state.debugUnlock)return false;
   var prev=stats(ch-1);
   if(prev.total===0)return false;
-  return !prev.passed;
+  return !prev.pass;
 }
 function wrongOf(ch){
-  return questionsOf(ch).filter(function(q){var a=state.attempts[q.qid];return a&&a.inWrong;});
+  return questionsOf(ch).filter(function(q){var a=state.attempts[q.qid];return a&&a.inWrong&&!a.cleared;});
 }
 function chapterSections(c){
   if(c&&c.sections&&c.sections.length)return c.sections;
@@ -419,10 +503,25 @@ function mergeAttempts(localAtt,serverAtt){
   });
   return out;
 }
+function mergeChapterPass(lp,sp){
+  var out={};
+  Object.keys(lp||{}).forEach(function(k){out[k]=assign({},lp[k]);});
+  Object.keys(sp||{}).forEach(function(k){
+    var s=sp[k];
+    if(typeof s!=="object"||!s)return;
+    if(!out[k]){out[k]=assign({},s);}
+    else{
+      var L=out[k],S=s;
+      if((S.date||"")>(L.date||""))out[k]=assign({},S);
+      else if((S.date||"")===(L.date||"")&&(S.score||0)>(L.score||0))out[k]=assign({},S);
+    }
+  });
+  return out;
+}
 function pushProgress(){
   if(!isHttp()||SYNC.staticMode)return;
   setSyncStatus("syncing");
-  httpRequest("POST","/api/progress",{schema:1,attempts:state.attempts},3000,function(res){
+  httpRequest("POST","/api/progress",{schema:1,attempts:state.attempts,chapterPass:state.chapterPass},3000,function(res){
     if(res.ok){setSyncStatus("synced");}
     else{applyLocalFail(res);}
   });
@@ -565,8 +664,10 @@ function openChapter(ch){
   view.ch=ch;view.screen="chapter";
   renderChapterLoading(ch);
   ensureChapter(ch,function(ok,data,res){
-    if(ok){safeRender(renderChapter);}
-    else{renderChapterError(ch,res);}
+    if(ok){
+      safeRender(renderChapter);
+      if(view.autoStart){view.autoStart=false;startQuiz();}
+    }else{renderChapterError(ch,res);}
   });
 }
 
@@ -583,30 +684,73 @@ function safeRender(fn){
 /* ---------- 渲染：首页（章列表） ---------- */
 function renderHome(){
   var app=document.getElementById("app");
-  var totalWrong=Object.keys(state.attempts).filter(function(k){return state.attempts[k].inWrong;}).length;
-  var html='<div class="card"><div class="row"><b>错题本</b><span class="chip">当前共 '+totalWrong+' 道错题</span>'+
-    '<span class="muted" style="font-size:14px">进入任意章节后，用「R2 错题轮」单独抽出重刷。</span></div></div>';
-  window.DATA.chapters.forEach(function(c){
-    var s=stats(c.ch), locked=isLocked(c.ch);
-    var status, cls;
-    if(locked){status="🔒 未解锁";cls="lock";}
-    else if(s.passed){status="✅ 已通关";cls="pass";}
-    else if(s.answered>0){status="🟡 进行中";cls="doing";}
-    else{status="⬜ 未开始";cls="";}
-    var acc=s.accuracy===null?"—":Math.round(s.accuracy*100)+"%";
-    html+='<div class="card ch-item'+(locked?" locked":"")+'" data-ch="'+c.ch+'">'+
-      '<div class="ch-head"><span class="ch-name">'+esc(c.name)+'</span><span class="status '+cls+'">'+status+'</span></div>'+
-      (c.goal_text?'<div class="ch-goal">本章解决什么问题：'+esc(c.goal_text)+'</div>':"")+
-      '<div class="ch-meta"><span>总题数 '+s.total+'</span><span>已答 '+s.answered+'</span><span>正确率 '+acc+'</span><span>错题 '+s.wrong+'</span>'+
-      (c.exam_types?'<span>题型：'+esc(c.exam_types)+'</span>':"")+'</div></div>';
+  var todayN=todayAnswered();
+  var dueN=dueWrongAll();
+  var doneArr=[],todoArr=[];
+  sortedChapters().forEach(function(c){
+    var s=stats(c.ch),st=chapterState(c.ch);
+    var row={c:c,s:s,st:st};
+    if(st==="done"||st==="review")doneArr.push(row);
+    else todoArr.push(row);
   });
+  var rec=null,i;
+  for(i=0;i<todoArr.length;i++){if(todoArr[i].s.answered<todoArr[i].s.total){rec=todoArr[i].c;break;}}
+
+  var html="";
+  html+='<div class="card"><div class="row"><b>今日目标 '+TODAY_GOAL+' 题</b><span class="chip">已答 '+todayN+'/'+TODAY_GOAL+'</span></div>';
+  var barW=Math.min(100,Math.round(todayN/TODAY_GOAL*100));
+  html+='<div class="today-bar"><i style="width:'+barW+'%"></i></div>';
+  if(dueN>0){
+    html+='<div class="row" style="margin:6px 0"><span>到期错题 <b>'+dueN+'</b> 题</span><button class="btn ghost" id="btn-wrong-review">先清错题</button></div>';
+  }else{
+    html+='<div class="row" style="margin:6px 0"><span class="muted">无到期错题</span></div>';
+  }
+  if(rec){
+    var rs=stats(rec.ch),rst=chapterState(rec.ch);
+    html+='<div class="row"><span>推荐：第'+rec.ch+'章 · 剩余 '+(rs.total-rs.answered)+' 题 · <span class="pill '+rst+'">'+STATE_LABEL[rst]+'</span></span><button class="btn primary" id="btn-continue">继续</button></div>';
+  }
+  html+='</div>';
+
+  html+='<div class="group-head">未完成 <span class="chip">'+todoArr.length+'</span></div>';
+  if(todoArr.length===0){html+='<div class="empty">全部章节已通关。</div>';}
+  todoArr.forEach(function(row){
+    var c=row.c,s=row.s,st=row.st;
+    var acc=s.accuracy===null?"—":Math.round(s.accuracy*100)+"%";
+    html+='<div class="card ch-item" data-ch="'+c.ch+'">'+
+      '<div class="ch-head"><span class="ch-name">第'+c.ch+'章 '+esc(c.name)+'</span><span class="pill '+st+'">'+STATE_LABEL[st]+'</span></div>'+
+      '<div class="ch-meta"><span>已答 '+s.answered+'/'+s.total+'</span><span>正确率 '+acc+'</span><span>错题 '+s.wrong+'</span></div></div>';
+  });
+
+  html+='<div class="group-head">✅ 已完成 <span class="chip">'+doneArr.length+'</span><button class="btn ghost collapse-btn" id="toggle-done">'+(doneCollapsed?"展开":"收起")+'</button></div>';
+  html+='<div class="done-list'+(doneCollapsed?" collapsed":"")+'">';
+  if(doneArr.length===0){html+='<div class="empty">暂无已通关章节。</div>';}
+  doneArr.forEach(function(row){
+    var c=row.c,s=row.s,pass=state.chapterPass[c.ch];
+    var date=pass&&pass.date?pass.date:"—";
+    var score=pass&&typeof pass.score==="number"?(pass.score+"%"):"—";
+    html+='<div class="card ch-item" data-ch="'+c.ch+'">'+
+      '<div class="ch-head"><span class="ch-name">✅ 第'+c.ch+'章 '+esc(c.name)+'</span></div>'+
+      '<div class="ch-meta"><span>通关日期 '+date+'</span><span>得分 '+score+'</span><span>错题 '+s.wrong+'</span></div></div>';
+  });
+  html+='</div>';
+
   app.innerHTML=html;
   Array.prototype.forEach.call(app.querySelectorAll(".ch-item"),function(el){
-    el.addEventListener("click",function(){
-      var ch=parseInt(el.getAttribute("data-ch"),10);
-      openChapter(ch);
-    });
+    el.addEventListener("click",function(){openChapter(parseInt(el.getAttribute("data-ch"),10));});
   });
+  var wr=document.getElementById("btn-wrong-review");
+  if(wr)wr.onclick=startWrongReview;
+  var ct=document.getElementById("btn-continue");
+  if(ct)ct.onclick=function(){openChapter(rec.ch);};
+  var td=document.getElementById("toggle-done");
+  if(td)td.onclick=function(){doneCollapsed=!doneCollapsed;safeRender(renderHome);};
+}
+function startWrongReview(){
+  var arr=sortedChapters();
+  var i,ch;
+  for(i=0;i<arr.length;i++){ch=arr[i].ch;if(dueWrongOfChapter(ch)>0){view.mode="R2";view.autoStart=true;openChapter(ch);return;}}
+  for(i=0;i<arr.length;i++){ch=arr[i].ch;if(wrongOf(ch).length>0){view.mode="R2";view.autoStart=true;openChapter(ch);return;}}
+  alert("目前没有需要复习的错题。");
 }
 
 /* ---------- 渲染：章节页 ---------- */
@@ -616,12 +760,11 @@ function renderChapter(){
   var acc=s.accuracy===null?"—":Math.round(s.accuracy*100)+"%";
   var remain;
   if(s.total===0){remain="本章暂无题目";}
-  else if(!s.passed){
-    var parts=[];
-    if(s.answered<s.total)parts.push("还差 "+(s.total-s.answered)+" 题未答");
-    if(s.accuracy!==null&&s.accuracy<PASS_ACC)parts.push("正确率还差 "+Math.max(0,Math.ceil((PASS_ACC-s.accuracy)*100))+" 个百分点");
-    remain=parts.length?parts.join("，"):"已达通关标准";
-  }else{remain="已通关";}
+  else if(s.pass){remain="已通关";}
+  else{
+    var gap=Math.max(0,Math.ceil(COV_DONE*s.total)-s.answered);
+    remain="覆盖率 "+Math.round(s.coverage*100)+"%，R3 解锁还差 "+gap+" 题";
+  }
   var wrong=wrongOf(c.ch);
 
   var html='<div class="row"><button class="btn ghost" id="btn-back">← 返回章节列表</button>'+
@@ -632,7 +775,7 @@ function renderChapter(){
     '<span>已答 <b>'+s.answered+'</b></span>'+
     '<span>正确率 <b>'+acc+'</b></span>'+
     '<span>错题 <b>'+s.wrong+'</b></span>'+
-    '<span>状态 <b>'+(s.passed?"✅ 已通关":"🟡 未通关")+'</b></span>'+
+    '<span>状态 <b>'+STATE_LABEL[chapterState(c.ch)]+'</b></span>'+
     '<span>还差：'+esc(remain)+'</span></div>';
 
   html+='<div class="modes">'+
@@ -656,16 +799,22 @@ function renderChapter(){
     html+='<div class="card">';
     if(wrong.length===0){html+='<div class="empty">错题本是空的，先去 R1 或 R3 做题。</div>';}
     else{
-      html+='<div class="muted" style="margin-bottom:10px">错题 '+wrong.length+' 道。连续两遍都答对，才会清出错题本。</div>'+
+      html+='<div class="muted" style="margin-bottom:10px">错题 '+wrong.length+' 道。连续两遍答对后移出错题本，答题记录保留。</div>'+
         '<button class="btn primary" id="btn-start">开始 R2 错题轮（'+wrong.length+' 题）</button>';
     }
     html+='</div>';
   }else{
     var qs=questionsOf(c.ch);
-    var prac=qs.filter(function(q){return q.card_type==="实务";});
-    var note=prac.length<Math.ceil(qs.length*0.6)&&qs.length>0?'<div class="note">本章实务题不足 60%，已按现有实务题优先抽取。</div>':"";
-    html+='<div class="card"><div class="muted" style="margin-bottom:10px">全章随机抽题，实务题优先占比 ≥60%。共 '+qs.length+' 题。</div>'+note+
-      '<button class="btn primary" id="btn-start"'+(qs.length===0?' disabled':'')+'>开始 R3 通关卷</button></div>';
+    var r3Size=Math.max(15,Math.ceil(s.total*0.20));
+    var unlocked=state.debugUnlock||s.coverage>=COV_DONE;
+    var needAns=Math.ceil(COV_DONE*s.total);
+    var gapR3=Math.max(0,needAns-s.answered);
+    var covPct=Math.round(s.coverage*100);
+    var btn;
+    if(qs.length===0){btn='<button class="btn primary" disabled>本章暂无题目</button>';}
+    else if(!unlocked){btn='<button class="btn primary" disabled>R3 未解锁：还差 '+gapR3+' 题（覆盖率 '+covPct+'%）</button>';}
+    else{btn='<button class="btn primary" id="btn-start">开始 R3 通关卷（'+r3Size+' 题）</button>';}
+    html+='<div class="card"><div class="muted" style="margin-bottom:10px">覆盖率 ≥80% 解锁；题量 max(15, 章题数×20%)，实务题优先。共 '+qs.length+' 题。</div>'+btn+'</div>';
   }
   document.getElementById("app").innerHTML=html;
 
@@ -684,12 +833,13 @@ function renderChapter(){
 function buildQueue(){
   var qs=questionsOf(view.ch);
   if(view.mode==="R1"){return qs.filter(function(q){return sectionOf(q)===view.section;});}
-  if(view.mode==="R2"){return qs.filter(function(q){return state.attempts[q.qid]&&state.attempts[q.qid].inWrong;});}
-  var prac=qs.filter(function(q){return q.card_type==="实务";});
-  var theory=qs.filter(function(q){return q.card_type!=="实务";});
-  var needPrac=Math.ceil(qs.length*0.6);
-  var p=shuffle(prac).slice(0,Math.min(needPrac,prac.length));
-  return shuffle(p.concat(shuffle(theory)));
+  if(view.mode==="R2"){return qs.filter(function(q){var a=state.attempts[q.qid];return a&&a.inWrong&&!a.cleared;});}
+  var prac=qs.filter(function(q){return q.card_type==="实务"||q.practical_hook;});
+  var theory=qs.filter(function(q){return !(q.card_type==="实务"||q.practical_hook);});
+  var size=Math.max(15,Math.ceil(qs.length*0.20));
+  var p=shuffle(prac),t=shuffle(theory);
+  var picked=p.slice(0,Math.min(size,p.length)).concat(t);
+  return shuffle(picked.slice(0,size));
 }
 function startQuiz(){
   view.queue=buildQueue();
@@ -811,48 +961,88 @@ function judge(q,selectedArr){
   safeRender(renderQuestion);
 }
 function record(q,right,given){
+  var now=Date.now();
   var prev=state.attempts[q.qid];
-  var entry=prev?assign({},prev):{consecRight:0,inWrong:false};
+  var entry=prev?assign({},prev):{consecRight:0,inWrong:false,rightCount:0,wrongCount:0,cleared:false};
   entry.editing=false;
   entry.verdict=right?"right":"wrong";
   entry.given=given;
   entry.answeredAt=new Date().toISOString();
+  entry.lastTs=now;
   entry.n=(prev&&prev.n||0)+1;
   if(right){
+    entry.rightCount=(prev&&prev.rightCount||0)+1;
+    entry.wrongCount=(prev&&prev.wrongCount||0);
     entry.consecRight=(prev&&prev.consecRight||0)+1;
+    var interval=SPACING[Math.min(entry.rightCount,SPACING.length)-1];
+    entry.dueAt=now+interval*86400000;
     if(view.mode==="R2"&&entry.consecRight>=2){
-      delete state.attempts[q.qid];saveState();scheduleSync();return;
+      entry.cleared=true;entry.inWrong=false;
+    }else{
+      entry.cleared=!!(prev&&prev.cleared);
+      entry.inWrong=!!(prev&&prev.inWrong);
     }
-    entry.inWrong=view.mode==="R2"?true:!!(prev&&prev.inWrong);
   }else{
+    entry.wrongCount=(prev&&prev.wrongCount||0)+1;
+    entry.rightCount=(prev&&prev.rightCount||0);
     entry.consecRight=0;
     entry.inWrong=true;
+    entry.cleared=false;
+    entry.dueAt=now+1*86400000;
   }
   state.attempts[q.qid]=entry;
   saveState();
   scheduleSync();
 }
 
+function queueResult(){
+  var right=0,total=0;
+  for(var i=0;i<view.queue.length;i++){
+    var q=view.queue[i],a=state.attempts[q.qid];
+    if(a&&(a.verdict==="right"||a.verdict==="wrong")){total++;if(a.verdict==="right")right++;}
+  }
+  return {right:right,total:total,accuracy:total>0?right/total:0};
+}
 function showSummary(){
   var s=stats(view.ch);
-  var acc=s.accuracy===null?"—":Math.round(s.accuracy*100)+"%";
   var app=document.getElementById("app");
   var c=metaOf(view.ch);
-  app.innerHTML='<div class="card summary">'+
+  var res=queueResult();
+  var r3Passed=view.mode==="R3"&&res.total>0&&res.accuracy>=PASS_ACC;
+  var newlyPass=false;
+  if(r3Passed&&!s.pass){
+    state.chapterPass[c.ch]={date:new Date().toISOString().slice(0,10),score:Math.round(res.accuracy*100),n:view.queue.length,coverage:s.coverage};
+    saveState();scheduleSync();
+    newlyPass=true;
+  }
+  var passNow=!!(state.chapterPass&&state.chapterPass[c.ch]);
+  var acc=s.accuracy===null?"—":Math.round(s.accuracy*100)+"%";
+  var next=nextIncomplete(c.ch);
+  var banner=passNow?"✅ 本章已通关":"🟡 尚未通关";
+  var html='<div class="card summary">'+
     '<div class="progress">'+esc(c.name)+'</div>'+
-    '<div class="big">'+(s.passed?"✅ 本章已通关":"🟡 尚未通关")+'</div>'+
-    '<div class="stats-line" style="justify-content:center"><span>已答 '+s.answered+' / '+s.total+'</span><span>正确率 '+acc+'</span><span>错题 '+s.wrong+'</span></div>'+
-    '<div class="row" style="justify-content:center;margin-top:16px">'+
+    '<div class="big">'+banner+'</div>'+
+    '<div class="stats-line" style="justify-content:center"><span>已答 '+s.answered+' / '+s.total+'</span><span>正确率 '+acc+'</span><span>错题 '+s.wrong+'</span></div>';
+  if(newlyPass&&next){
+    html+='<div class="note" style="margin-top:10px;text-align:center">第'+c.ch+'章已通关 → 下一章：第'+next.ch+'章 '+esc(next.name)+'</div>';
+  }
+  html+='<div class="row" style="justify-content:center;margin-top:16px">'+
     '<button class="btn" id="sm-chapter">返回章节页</button>'+
-    '<button class="btn primary" id="sm-home">回章节列表</button></div></div>';
+    '<button class="btn" id="sm-home">回章节列表</button>';
+  if(newlyPass&&next){html+='<button class="btn primary" id="sm-next">继续下一章</button>';}
+  html+='</div></div>';
+  app.innerHTML=html;
   document.getElementById("sm-chapter").onclick=function(){view.screen="chapter";renderChapter();};
   document.getElementById("sm-home").onclick=function(){view.screen="home";safeRender(renderHome);};
+  var nxt=document.getElementById("sm-next");
+  if(nxt)nxt.onclick=function(){openChapter(next.ch);};
 }
 
 /* ---------- 导入 / 导出 ---------- */
-function downloadBackup(att){
+function downloadBackup(att,cp){
   var merged=mergeAttempts(state.attempts,att||{});
-  var data={app:"cpa-quiz",version:2,exportedAt:new Date().toISOString(),state:assign({},state,{attempts:merged})};
+  var mergedPass=mergeChapterPass(state.chapterPass,cp||{});
+  var data={app:"cpa-quiz",version:3,exportedAt:new Date().toISOString(),state:assign({},state,{attempts:merged,chapterPass:mergedPass})};
   var blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
   var a=document.createElement("a");
   a.href=URL.createObjectURL(blob);
@@ -863,7 +1053,7 @@ function exportState(){
   if(!SYNC.staticMode&&isHttp()){
     setSyncStatus("syncing");
     httpRequest("GET","/api/progress",null,3000,function(res){
-      if(res.ok){setSyncStatus("synced");downloadBackup(res.data&&res.data.attempts);}
+      if(res.ok){setSyncStatus("synced");downloadBackup(res.data&&res.data.attempts,res.data&&res.data.chapterPass);}
       else{applyLocalFail(res);downloadBackup({});}
     });
   }else{
@@ -879,6 +1069,7 @@ function importState(file){
       if(!st||typeof st.attempts!=="object")throw new Error("格式不符：缺少 attempts");
       var imported=migrateAttempts(st.attempts);
       state.attempts=mergeAttempts(state.attempts,imported);
+      if(typeof st.chapterPass==="object"&&st.chapterPass){state.chapterPass=mergeChapterPass(state.chapterPass,st.chapterPass);}
       if(typeof st.debugUnlock==="boolean")state.debugUnlock=st.debugUnlock;
       if(st.mode)state.mode=st.mode;
       state.debugUnlock=!!state.debugUnlock;
@@ -929,8 +1120,9 @@ function bootstrapSync(){
   if(!isHttp()){setSyncStatus("local","offline");return;}
   setSyncStatus("syncing");
   httpRequest("GET","/api/progress",null,3000,function(res){
-    if(res.ok&&res.data&&res.data.attempts){
-      state.attempts=migrateAttempts(mergeAttempts(state.attempts,res.data.attempts));
+    if(res.ok&&res.data){
+      if(res.data.attempts){state.attempts=migrateAttempts(mergeAttempts(state.attempts,res.data.attempts));}
+      if(res.data.chapterPass){state.chapterPass=mergeChapterPass(state.chapterPass,res.data.chapterPass);}
       saveState();
       setSyncStatus("synced");
       rerenderCurrent();
